@@ -1,5 +1,6 @@
 pymongo==4.3.3
 PyYAML==6.0
 Flask==2.3.2
-python-benedict==0.31.0
+python-benedict==0.32.0
+flask-swagger-ui==4.11.1
 

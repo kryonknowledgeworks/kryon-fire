@@ -2,13 +2,15 @@ import this
 
 from core.DomainResource import DomainResource
 from core.utils.resource_validator import is_common_resource_validation
+from core.utils.vars import get_patient_schema
 
 
 class Patient(DomainResource):
     resource = None
+    schema = get_patient_schema()
 
 
-def do_patient_specific_validation():
+def do_validate():
     pass
 
 
@@ -16,5 +18,4 @@ def __init__(self, resource):
     print("From ===> class Patient")
     super().__init__(resource)
     self.resource = resource
-    if is_common_resource_validation(resource):
-        self.do_patient_specific_validation()
+    do_validate()

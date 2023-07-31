@@ -1,0 +1,16 @@
+{
+  "resourceType": {
+    "type": "string",
+    "constant": "Patient",
+    "description": "Information about an individual or animal receiving health care services"
+  },
+  "gender": {
+    "type": "predefined-constants",
+    "values": [
+      "male",
+      "female",
+      "other",
+      "unknown"
+    ]
+  }
+}

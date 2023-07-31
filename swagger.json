@@ -1,0 +1,55 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "title": "API's for KryonFire Server ",
+    "description": "This API Document contains the api.",
+    "version": "1.0"
+  },
+  "basePath": "/api",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/v1/resource/{resource_type}": {
+      "post": {
+        "summary": "Returns a simple greeting message.",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_type",
+            "type": "string",
+            "enum": [
+              "Patient",
+              "Practitioner"
+            ],
+            "required": true,
+            "description": "Numeric ID of the user to get"
+          }
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response.",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "message": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

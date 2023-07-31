@@ -4,7 +4,7 @@ global schema
 
 import json
 
-schema_path = os.getcwd() + '/schema/fhir.schema.json'
+schema_path = os.getcwd() + '/schema/patient.json'
 from benedict import benedict
 
 # read file
@@ -16,7 +16,7 @@ obj = json.loads(data)
 print("###################################3")
 
 
-def get_schema():
+def get_patient_schema():
     return benedict(obj)
 
 
