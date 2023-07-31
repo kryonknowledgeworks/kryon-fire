@@ -1,7 +1,7 @@
 {
   "swagger": "2.0",
   "info": {
-    "title": "API's for KryonFire Server ",
+    "title": "APIs for KryonFire Server ",
     "description": "This API Document contains the api.",
     "version": "1.0"
   },
@@ -9,6 +9,12 @@
   "schemes": [
     "http",
     "https"
+  ],
+   "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
   ],
   "paths": {
     "/v1/resource/{resource_type}": {

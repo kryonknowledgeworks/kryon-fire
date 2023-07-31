@@ -2,15 +2,64 @@
   "resourceType": {
     "type": "string",
     "constant": "Patient",
-    "description": "Information about an individual or animal receiving health care services"
+    "description": "Information about an individual or animal receiving health care services",
+    "cardinality": "0..*"
+  },
+  "active": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Whether this patient record is in active use.",
+    "regex": "true|false"
   },
   "gender": {
-    "type": "predefined-constants",
-    "values": [
+    "type": "predefinedConstants",
+    "predefinedConstants": [
       "male",
       "female",
       "other",
       "unknown"
+    ],
+    "cardinality": "0..1",
+    "description": "The gender that the patient is considered to have for administration and record keeping purposes."
+  },
+  "birthDate": {
+    "type": "date",
+    "cardinality": "0..1",
+    "description": "The date of birth for the individual.",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"
+  },
+  "deceased": {
+    "type": "multi_datatype",
+    "multi_datatype": [
+      {
+        "type": "boolean",
+        "cardinality": "0..1",
+        "description": "Indicates if the individual is deceased or not.",
+        "regex": "true|false"
+      },
+      {
+        "type": "dateTime",
+        "cardinality": "0..1",
+        "description": "Indicates if the individual is deceased or not.",
+        "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"
+      }
+    ]
+  },
+  "multipleBirth": {
+    "type": "multi_datatype",
+    "multi_datatype": [
+      {
+        "type": "boolean",
+        "cardinality": "0..1",
+        "description": "Indicates the patient is part of a multiple (boolean)",
+        "regex": "true|false"
+      },
+      {
+        "type": "integer",
+        "cardinality": "0..1",
+        "description": "Indicates the actual birth order (integer).",
+        "regex": "[0-9]+"
+      }
     ]
   }
 }

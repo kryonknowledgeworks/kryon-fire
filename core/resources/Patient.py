@@ -1,9 +1,9 @@
 from core.DomainResource import DomainResource
+from core.utils.validator import DataTypeValidator
 from core.utils.vars import get_patient_schema
 
 
 class Patient(DomainResource):
-    resource = None
 
     def __init__(self, resource):
         print("From ===> class Patient")
@@ -13,5 +13,15 @@ class Patient(DomainResource):
         self.do_validate()
 
     def do_validate(self):
+
         for key in self.schema.keys():
-            print(self.schema.get(key=key).get('type'))
+
+            if self.resource.get(key):
+                datatype = self.schema[key]['type']
+
+                DataTypeValidator().initialize_datatype(datatype=datatype,
+                                                        value=self.resource[key], key=key,
+                                                        regex=self.schema.get(key=key).get('regex'),
+                                                        predefinedConstants=self.schema.get(key=key).get(
+                                                            'predefinedConstants'),
+                                                        multi_datatype=self.schema.get(key=key).get('multi_datatype'))

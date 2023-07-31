@@ -1,19 +1,17 @@
 import os
+import json
+from benedict import benedict
 
 global schema
 
-import json
-
 schema_path = os.getcwd() + '/schema/patient.json'
-from benedict import benedict
 
 # read file
-with open(schema_path, 'r', encoding="utf8") as myfile:
-    data = myfile.read()
+with open(schema_path, 'r', encoding="utf8") as schema_json:
+    data = schema_json.read()
 
 # parse file
 obj = json.loads(data)
-print("###################################3")
 
 
 def get_patient_schema():

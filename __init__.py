@@ -26,14 +26,14 @@ def index():
 # Configure Swagger UI
 SWAGGER_URL = '/swagger'
 API_URL = '/swagger.json'
-swaggerui_blueprint = get_swaggerui_blueprint(
+swagger_ui_blueprint = get_swaggerui_blueprint(
     SWAGGER_URL,
     API_URL,
     config={
         'app_name': "Sample API"
     }
 )
-app.register_blueprint(swaggerui_blueprint, url_prefix=SWAGGER_URL)
+app.register_blueprint(swagger_ui_blueprint, url_prefix=SWAGGER_URL)
 
 
 @app.route('/swagger.json')
