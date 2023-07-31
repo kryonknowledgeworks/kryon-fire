@@ -10,16 +10,10 @@
     "http",
     "https"
   ],
-  "consumes": [
-    "application/json"
-  ],
-  "produces": [
-    "application/json"
-  ],
   "paths": {
     "/v1/resource/{resource_type}": {
       "post": {
-        "summary": "Returns a simple greeting message.",
+        "summary": "Create a resource",
         "parameters": [
           {
             "in": "path",
@@ -37,7 +31,9 @@
             "name": "body",
             "description": "Resource object",
             "required": true,
-            "schema": {}
+            "schema": {
+              "type": "object"
+            }
           }
         ],
         "produces": [

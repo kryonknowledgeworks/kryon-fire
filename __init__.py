@@ -8,7 +8,7 @@ import rest_handler
 app = Flask(__name__, template_folder='templates')
 
 
-@app.route('/v1/api/resource/<resource_type>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@app.route('/api/v1/resource/<resource_type>', methods=['GET', 'POST', 'PUT', 'DELETE'])
 def endpoint(resource_type):
     if request.method == 'POST':
         resource = rest_handler.add_resource(resource_type, request.json)
