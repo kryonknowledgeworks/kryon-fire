@@ -30,7 +30,14 @@
               "Practitioner"
             ],
             "required": true,
-            "description": "Numeric ID of the user to get"
+            "description": "type of resource"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource object",
+            "required": true,
+            "schema": {}
           }
         ],
         "produces": [
