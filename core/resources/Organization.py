@@ -3,14 +3,14 @@ from core.utils.validator import DataTypeValidator
 from core.utils.vars import get_resource_schema
 
 
-class Patient(DomainResource):
+class Organization(DomainResource):
 
     def __init__(self, resource):
         self.validation_report = None
-        print("From ===> class Patient")
+        print("From ===> class Organization")
         super().__init__(resource)
         self.resource = resource
-        self.schema = get_resource_schema("patient")
+        self.schema = get_resource_schema("organization")
         self.do_validate()
 
     def do_validate(self):

@@ -1,5 +1,5 @@
 import re
-from datetime import datetime
+from dateutil.parser import parse
 
 error_details = dict()
 
@@ -9,15 +9,9 @@ def case_regex(value, regex):
         return True
 
 
-def format_change(datatype):
-    if datatype in ["date", "dateTime"]:
-        return "datetime"
-    elif datatype == "boolean":
-        return "bool"
-    elif datatype == "string":
-        return "str"
-    elif datatype == "integer":
-        return "int"
+def constant_validator(value, constant):
+    if value == constant:
+        return True
 
 
 class DataTypeValidator:
@@ -25,16 +19,19 @@ class DataTypeValidator:
         self.predefinedConstants = None
         self.multi_datatype = None
         self.key = None
+        self.constant = None
         self.regex = None
         self.value = None
 
-    def initialize_datatype(self, datatype, value, key, regex=None, predefinedConstants=None, multi_datatype=None):
+    def initialize_datatype(self, datatype, value, key, regex=None, predefinedConstants=None, multi_datatype=None,
+                            constant=None):
         default = "incorrect_datatype"
         self.value = value
         self.regex = regex
         self.key = key
         self.predefinedConstants = predefinedConstants
         self.multi_datatype = multi_datatype
+        self.constant = constant
         getattr(self, 'case_' + str(datatype), lambda: default)()
 
     def case_string(self):
@@ -42,31 +39,32 @@ class DataTypeValidator:
 
         if str_check:
             if self.regex:
-                if case_regex(self.value, self.regex):
-                    ...
-                else:
+                if not case_regex(self.value, self.regex):
                     error_details[self.key] = "Regex not matched."
+
+            if self.constant:
+                if not constant_validator(self.value, self.constant):
+                    error_details[self.key] = f"Constant not matched ({self.constant})."
         else:
             error_details[self.key] = "Only allowed string data type."
 
-        return str_check
+    def case_markdown(self):
+        self.case_string()
 
     def case_date(self):
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
-            return True
+            ...
         else:
             error_details[self.key] = "Invalid date format."
 
     def case_dateTime(self):
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
-            return True
+            ...
         else:
             error_details[self.key] = "Invalid date time format."
 
     def case_boolean(self):
-        if isinstance(self.value, bool):
-            return True
-        else:
+        if not isinstance(self.value, bool):
             error_details[self.key] = "Only allowed boolean data type."
 
     def case_predefinedConstants(self):
@@ -80,7 +78,6 @@ class DataTypeValidator:
             error_details[self.key] = "Only allowed string data type."
 
     def case_multi_datatype(self):
-        from dateutil.parser import parse
         checklist = list()
         datatype_store = list()
         for multi_type in self.multi_datatype:
@@ -89,8 +86,10 @@ class DataTypeValidator:
                 if multi_type.get("type") in ["dateTime", "date"]:
                     try:
                         parse(self.value)
-                        if isinstance(self.value, str) and re.fullmatch(multi_type.get("regex"), self.value):
+                        if case_regex(self.value, multi_type.get("regex")):
                             checklist.append(True)
+                        else:
+                            checklist.append(False)
                     except ValueError:
                         checklist.append(False)
                 elif multi_type.get("type") == "integer":
@@ -110,6 +109,9 @@ class DataTypeValidator:
                         checklist.append(False)
         if True not in checklist:
             error_details[self.key] = "Only allowed data type is " + str(tuple(datatype_store))
+
+    def external_error_details(self, external_error_details):
+        error_details.update(external_error_details)
 
     def validation_report(self):
         return error_details

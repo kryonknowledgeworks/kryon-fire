@@ -2,19 +2,21 @@ import os
 import json
 from benedict import benedict
 
-global schema
 
-schema_path = os.getcwd() + '/schema/patient.json'
+def get_resource_schema(resource_type: str):
 
-# read file
-with open(schema_path, 'r', encoding="utf8") as schema_json:
-    data = schema_json.read()
+    schema_path = os.getcwd() + f'/schema/{resource_type}.json'
 
-# parse file
-obj = json.loads(data)
+    if not os.path.exists(schema_path):
+        return None
 
+    # read file
+    with open(schema_path, 'r', encoding="utf8") as schema_json:
+        data = schema_json.read()
 
-def get_patient_schema():
+    # parse file
+    obj = json.loads(data)
+
     return benedict(obj)
 
 
