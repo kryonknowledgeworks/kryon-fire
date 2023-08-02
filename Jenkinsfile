@@ -5,7 +5,7 @@ pipeline {
             steps {
                 script {
                     sh 'ls'
-                    sh '/var/lib/jenkins/sonar-scanner-3.2.0.1227-linux/conf/sonar-scanner.properties \
+                    sh '/var/lib/jenkins/sonar-scanner-5.0.0.2966-linux/conf/sonar-scanner.properties \
                         -Dsonar.projectKey=KryonFhir \
                         -Dsonar.sources=. \
                         -Dsonar.host.url=https://sonar.kkwtk.com \
