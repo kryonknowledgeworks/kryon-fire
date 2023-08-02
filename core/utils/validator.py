@@ -1,5 +1,4 @@
 import re
-from dateutil.parser import parse
 
 error_details = dict()
 
@@ -16,40 +15,50 @@ def constant_validator(value, constant):
 
 class DataTypeValidator:
     def __init__(self):
-        self.predefinedConstants = None
+        self.predefined_constants = None
         self.multi_datatype = None
         self.key = None
         self.constant = None
         self.regex = None
         self.value = None
 
-    def initialize_datatype(self, datatype, value, key, regex=None, predefinedConstants=None, multi_datatype=None,
+    def initialize_datatype(self, datatype, value, key, regex=None, predefined_constants=None, multi_datatype=None,
                             constant=None):
         default = "incorrect_datatype"
         self.value = value
         self.regex = regex
         self.key = key
-        self.predefinedConstants = predefinedConstants
+        self.predefined_constants = predefined_constants
         self.multi_datatype = multi_datatype
         self.constant = constant
-        getattr(self, 'case_' + str(datatype), lambda: default)()
+        return getattr(self, 'case_' + str(datatype), lambda: default)()
 
     def case_string(self):
         str_check = isinstance(self.value, str)
 
         if str_check:
-            if self.regex:
-                if not case_regex(self.value, self.regex):
-                    error_details[self.key] = "Regex not matched."
+            if self.regex and not case_regex(self.value, self.regex):
+                error_details[self.key] = "Regex not matched."
 
-            if self.constant:
-                if not constant_validator(self.value, self.constant):
-                    error_details[self.key] = f"Constant not matched ({self.constant})."
+            if self.constant and not constant_validator(self.value, self.constant):
+                error_details[self.key] = f"Constant not matched ({self.constant})."
         else:
             error_details[self.key] = "Only allowed string data type."
 
+        return error_details.get(self.key)
+
+    def case_integer(self):
+        int_check = isinstance(self.value, int)
+        if int_check:
+            if self.constant and not constant_validator(self.value, self.constant):
+                error_details[self.key] = f"Constant not matched ({self.constant})."
+        else:
+            error_details[self.key] = "Only allowed integer data type."
+
+        return error_details.get(self.key)
+
     def case_markdown(self):
-        self.case_string()
+        return self.case_string()
 
     def case_date(self):
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
@@ -57,56 +66,46 @@ class DataTypeValidator:
         else:
             error_details[self.key] = "Invalid date format."
 
-    def case_dateTime(self):
+        return error_details.get(self.key)
+
+    def case_date_time(self):
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
             ...
         else:
             error_details[self.key] = "Invalid date time format."
 
+        return error_details.get(self.key)
+
     def case_boolean(self):
         if not isinstance(self.value, bool):
             error_details[self.key] = "Only allowed boolean data type."
 
-    def case_predefinedConstants(self):
-        if isinstance(self.value, str):
-            if self.value in self.predefinedConstants:
-                return True
-            else:
-                error_details[
-                    self.key] = f"Chosen value is not in predefined constants {tuple(self.predefinedConstants)}."
+        return error_details.get(self.key)
+
+    def case_predefined_constants(self):
+        if isinstance(self.value, str) and self.value in self.predefined_constants:
+            ...
         else:
-            error_details[self.key] = "Only allowed string data type."
+            error_details[
+                self.key] = f"Chosen value is not in predefined constants {tuple(self.predefined_constants)}."
+
+        return error_details.get(self.key)
 
     def case_multi_datatype(self):
         checklist = list()
         datatype_store = list()
+
         for multi_type in self.multi_datatype:
+
             datatype_store.append(multi_type.get("type"))
+
             if True not in checklist:
-                if multi_type.get("type") in ["dateTime", "date"]:
-                    try:
-                        parse(self.value)
-                        if case_regex(self.value, multi_type.get("regex")):
-                            checklist.append(True)
-                        else:
-                            checklist.append(False)
-                    except ValueError:
-                        checklist.append(False)
-                elif multi_type.get("type") == "integer":
-                    if isinstance(self.value, int):
-                        checklist.append(True)
-                    else:
-                        checklist.append(False)
-                elif multi_type.get("type") == "boolean":
-                    if isinstance(self.value, bool):
-                        checklist.append(True)
-                    else:
-                        checklist.append(False)
-                elif multi_type.get("type") == "string":
-                    if isinstance(self.value, str):
-                        checklist.append(True)
-                    else:
-                        checklist.append(False)
+                if self.initialize_datatype(datatype=multi_type.get("type"), value=self.value, key=self.key,
+                                            regex=multi_type.get("regex")) is None:
+                    checklist.append(True)
+                else:
+                    error_details.pop(self.key)
+
         if True not in checklist:
             error_details[self.key] = "Only allowed data type is " + str(tuple(datatype_store))
 

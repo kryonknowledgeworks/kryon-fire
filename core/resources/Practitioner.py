@@ -23,8 +23,8 @@ class Practitioner(DomainResource):
 
                 DataTypeValidator().initialize_datatype(datatype=datatype, value=self.resource[key], key=key,
                                                         regex=self.schema.get(key=key).get('regex'),
-                                                        predefinedConstants=self.schema.get(key=key).get(
-                                                            'predefinedConstants'),
+                                                        predefined_constants=self.schema.get(key=key).get(
+                                                            'predefined_constants'),
                                                         multi_datatype=self.schema.get(key=key).get('multi_datatype'),
                                                         constant=self.schema.get(key=key).get('constant'))
 
