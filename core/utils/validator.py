@@ -96,9 +96,7 @@ class DataTypeValidator:
         datatype_store = list()
 
         for multi_type in self.multi_datatype:
-
             datatype_store.append(multi_type.get("type"))
-
             if True not in checklist:
                 if self.initialize_datatype(datatype=multi_type.get("type"), value=self.value, key=self.key,
                                             regex=multi_type.get("regex")) is None:
