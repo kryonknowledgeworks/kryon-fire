@@ -13,7 +13,7 @@ pipeline {
         -D sonar.projectKey=fhir \
         -D sonar.sourceEncoding=UTF-8 \
         -D sonar.language=py \
-        -D sonar.sources=core -
+        -D sonar.sources=core
         -D sonar.host.url = https: //sonar.kkwtk.com/"""
       }
     }
