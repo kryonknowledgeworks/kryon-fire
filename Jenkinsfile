@@ -4,12 +4,8 @@ pipeline {
         stage('Sonar Analytics') {
             steps {
                 script {
-                    def scannerHome = tool  'sonar'
-                    withSonarQubeEnv() {
+                    withSonarQubeEnv('SonarQube') {
                     sh "ls"
-                    sh "ls ${scannerHome}"
-                    sh "echo ${scannerHome}"
-                    sh "sonar-scanner -Dsonar.projectKey=KryonFhir -Dsonar.sources=core -Dsonar.host.url=https://sonar.kkwtk.com -Dsonar.login=sqp_649f7d8b01e0afc70d77846e9d8180b7f3585f8b"
                     }
                 }
             }
