@@ -1,0 +1,25 @@
+{
+  "use": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "usual",
+      "official",
+      "temp",
+      "secondary",
+      "old"
+    ],
+    "cardinality": "0..1",
+    "description": "Applications can assume that an identifier is permanent unless it explicitly says that it is temporary."
+  },
+  "type": {
+    "TBU": "TBU"
+  },
+  "system": "<uri>",
+  "value": "<string>",
+  "period": {
+    "TBU": "TBU"
+  },
+  "assigner": {
+    "TBU": "TBU"
+  }
+}
