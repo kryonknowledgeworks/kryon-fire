@@ -20,6 +20,7 @@ def constant_validator(value, constant):
 
 class TermValidator:
     """Validate term"""
+
     def __init__(self):
         self.list_item = None
         self.validate_array_msg = None
@@ -55,7 +56,13 @@ class TermValidator:
 
             for key in self.schema.keys():
                 if self.schema[key].get('cardinality') == '1..1' and not self.value.get(key):
-                    self.key_tree = self.key_tree + "/" + key if self.key_tree else key
+
+                    if self.list_item or self.list_item == 0:
+                        adding_msg = f"/[{self.list_item}]/" + key
+                    else:
+                        adding_msg = "/" + key
+
+                    self.key_tree = self.key_tree + adding_msg if self.key_tree else key
                     DataTypeValidator().external_error_details({self.key_tree: f"Missing required field. ({key})"})
 
             for key, inside_value in self.value.items():
