@@ -1,0 +1,32 @@
+{
+  "system": {
+    "type": "uri",
+    "cardinality": "0..1",
+    "description": "The system that is the target of the link (e.g. http://example.com)",
+    "regex": "\\S*"
+  },
+  "version": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The version of the system that is the target of the link (e.g. 1)",
+    "regex": "^[\\s\\S]+$"
+  },
+  "code": {
+    "type": "code",
+    "cardinality": "0..1",
+    "description": "The code for the link (e.g. http://loinc.org/fhir/la/2.1)",
+    "regex": "[^\\s]+( [^\\s]+)*"
+  },
+  "display": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The display for the code (e.g. LOINC 2.1 RELMA Accession ID)",
+    "regex": "^[\\s\\S]+$"
+  },
+  "userSelected": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "If this coding was chosen directly by the user",
+    "regex": "true|false"
+  }
+}

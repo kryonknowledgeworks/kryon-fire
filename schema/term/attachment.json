@@ -1,0 +1,75 @@
+{
+  "contentType": {
+    "type": "code",
+    "cardinality": "0..1",
+    "description": "The mime type of the content, with charset etc.",
+    "regex": "[^\\s]+( [^\\s]+)*"
+  },
+  "language": {
+    "type": "code",
+    "cardinality": "0..1",
+    "description": "The human language of the content (BCP-47)",
+    "regex": "[^\\s]+( [^\\s]+)*"
+  },
+  "data": {
+    "type": "base64_binary",
+    "cardinality": "0..1",
+    "description": "The actual content, base64 encoded",
+    "regex": "(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?"
+  },
+  "url": {
+    "type": "url",
+    "cardinality": "0..1",
+    "description": "A url where the data can be found",
+    "regex": "\\S*"
+  },
+  "size": {
+    "type": "integer64",
+    "cardinality": "0..1",
+    "description": "Number of bytes of content (if url provided)",
+    "regex": "[0]|[-+]?[1-9][0-9]*"
+  },
+  "hash": {
+    "type": "base64_binary",
+    "cardinality": "0..1",
+    "description": "The actual content, base64 encoded",
+    "regex": "(?:[A-Za-z0-9+/]{4})*(?:[A-Za-z0-9+/]{2}==|[A-Za-z0-9+/]{3}=)?"
+  },
+  "title": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Label to display in place of the data",
+    "regex": "^[\\s\\S]+$"
+  },
+  "creation": {
+    "type": "date_time",
+    "cardinality": "0..1",
+    "description": "Date attachment was first created",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"
+  },
+  "height": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Height of the image in pixels (photo/video)"
+  },
+  "width": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Width of the image in pixels (photo/video)"
+  },
+  "frames": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Number of frames if > 1 (photo/gif/video)"
+  },
+  "duration": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "Length in seconds (audio / video)"
+  },
+  "pages": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Number of printed pages"
+  }
+}

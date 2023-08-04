@@ -1,0 +1,14 @@
+{
+  "coding": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "A reference to a code defined by a terminology system.",
+    "ref": "coding"
+  },
+  "text": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A representation of the concept as a human readable string.",
+    "regex": "^[\\s\\S]+$"
+  }
+}
