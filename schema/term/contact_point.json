@@ -1,0 +1,45 @@
+{
+  "system": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "phone",
+      "fax",
+      "email",
+      "pager",
+      "url",
+      "sms",
+      "other"
+    ],
+    "cardinality": "0..1",
+    "description": "The type of the name."
+  },
+  "value": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The name of the person or organization.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "use": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "home",
+      "work",
+      "temp",
+      "old",
+      "mobile"
+    ],
+    "cardinality": "0..1",
+    "description": "The use of the name."
+  },
+  "rank": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "The rank of the name."
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The period of time during which the name was valid.",
+    "ref": "period"
+  }
+}
