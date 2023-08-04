@@ -1,0 +1,33 @@
+{
+  "resourceType": {
+    "type": "string",
+    "constant": "Organization",
+    "description": "This is a Organization resource",
+    "cardinality": "0..*",
+    "regex": "^[\\s\\S]+$"
+  },
+  "active": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Whether the organization\\u0027s record is still in active use.",
+    "regex": "true|false"
+  },
+  "name": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A name associated with the organization.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "alias": {
+    "type": "markdown",
+    "cardinality": "0..*",
+    "description": "A list of alternate names that the organization is known as, or was known as in the past.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "description": {
+    "type": "markdown",
+    "cardinality": "0..1",
+    "description": "A description of the organization\\u0027s purpose and scope.",
+    "regex": "^[\\s\\S]+$"
+  }
+}

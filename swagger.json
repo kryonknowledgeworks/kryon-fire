@@ -27,7 +27,8 @@
             "type": "string",
             "enum": [
               "Patient",
-              "Practitioner"
+              "Practitioner",
+              "Organization"
             ],
             "required": true,
             "description": "type of resource"

@@ -1,25 +1,28 @@
+"""This module contains utility functions for variables."""
 import os
 import json
 from benedict import benedict
 
-global schema
 
-schema_path = os.getcwd() + '/schema/patient.json'
+def get_resource_schema(resource_type: str):
+    """Returns a schema for a given resource type."""
+    schema_path = os.getcwd() + f'/schema/{resource_type}.json'
 
-# read file
-with open(schema_path, 'r', encoding="utf8") as schema_json:
-    data = schema_json.read()
+    if not os.path.exists(schema_path):
+        return None
 
-# parse file
-obj = json.loads(data)
+    # read file
+    with open(schema_path, 'r', encoding="utf8") as schema_json:
+        data = schema_json.read()
 
+    # parse file
+    obj = json.loads(data)
 
-def get_patient_schema():
     return benedict(obj)
 
 
 def build_schema_ref_path(resource_ref: str):
+    """Builds a path to a schema reference."""
     if resource_ref.startswith('#/'):
         return resource_ref[2:].replace('/', '.')
-    else:
-        return resource_ref
+    return resource_ref
