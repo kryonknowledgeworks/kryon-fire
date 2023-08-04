@@ -19,76 +19,95 @@ def constant_validator(value, constant):
 
 
 class TermValidator:
+    """Validate term"""
     def __init__(self):
+        self.list_item = None
+        self.validate_array_msg = None
+        self.validate_msg = None
+        self.key_tree = None
         self.term = None
         self.datatype = None
         self.schema = None
         self.key = None
         self.value = None
 
-    def initialize_term(self, datatype, term, value, key):
+    def initialize_term(self, datatype, term, value, key, key_tree=None, list_item=None):
         """Initialize term"""
         default = "incorrect_term"
         self.value = value
         self.key = key
+        self.key_tree = key_tree
         self.datatype = datatype
         self.term = term
+        self.list_item = list_item
         return getattr(self, f'case_{datatype}', lambda: default)()
 
     def case_object(self):
+
         if not isinstance(self.value, change_datatype_valid_format(self.datatype)):
-            DataTypeValidator().external_error_details({self.key: f"Only {self.datatype} is allowed. ({self.key})"})
+            self.key_tree = self.key_tree if self.key_tree else self.key
+
+            DataTypeValidator().external_error_details(
+                {self.key_tree: f"Only {self.datatype} is allowed. ({self.key})"})
 
         else:
             self.schema = get_resource_schema(f"term/{self.term}")
+
             for key in self.schema.keys():
                 if self.schema[key].get('cardinality') == '1..1' and not self.value.get(key):
-                    DataTypeValidator().external_error_details({key: f"Missing required field. ({key})"})
+                    self.key_tree = self.key_tree + "/" + key if self.key_tree else key
+                    DataTypeValidator().external_error_details({self.key_tree: f"Missing required field. ({key})"})
 
             for key, inside_value in self.value.items():
                 if self.schema.get(key):
+
+                    if self.list_item or self.list_item == 0:
+                        adding_msg = f"/[{self.list_item}]/" + key
+                    else:
+                        adding_msg = "/" + key
+
+                    self.key_tree = self.key_tree + adding_msg if self.key_tree else self.key
+
                     datatype = self.schema[key]['type']
-                    DataTypeValidator().initialize_datatype(datatype=datatype, value=inside_value,
-                                                            key=key,
-                                                            regex=self.schema[key].get('regex'),
-                                                            predefined_constants=self.schema[key].get(
-                                                                'predefined_constants'),
-                                                            multi_datatype=self.schema[key].get(
-                                                                'multi_datatype'),
-                                                            constant=self.schema[key].get('constant'),
-                                                            ref=self.schema[key].get('ref'))
+                    self.validate_msg = DataTypeValidator().initialize_datatype(datatype=datatype, value=inside_value,
+                                                                                key=key,
+                                                                                regex=self.schema[key].get('regex'),
+                                                                                predefined_constants=self.schema[
+                                                                                    key].get(
+                                                                                    'predefined_constants'),
+                                                                                multi_datatype=self.schema[key].get(
+                                                                                    'multi_datatype'),
+                                                                                constant=self.schema[key].get(
+                                                                                    'constant'),
+                                                                                ref=self.schema[key].get('ref'),
+                                                                                key_tree=self.key_tree)
+
+                    if self.validate_msg is None:
+                        self.key_tree = self.key_tree.replace(adding_msg, "")
+
+        return self.validate_msg
 
     def case_array(self):
+        self.key_tree = self.key_tree if self.key_tree else self.key
+
         if not isinstance(self.value, change_datatype_valid_format(self.datatype)):
-            DataTypeValidator().external_error_details({self.key: f"Only {self.datatype} is allowed. ({self.key})"})
+            DataTypeValidator().external_error_details(
+                {self.key_tree: f"Only {self.datatype} is allowed. ({self.key})"})
 
         else:
-            self.schema = get_resource_schema(f"term/{self.term}")
             for item in range(len(self.value)):
+                self.validate_array_msg = TermValidator().initialize_term(datatype="object", term=self.term,
+                                                                          value=self.value[item], key=self.key,
+                                                                          key_tree=self.key_tree, list_item=item)
 
-                for key in self.schema.keys():
-                    if self.schema[key].get('cardinality') == '1..1' and not self.value[item].get(key):
-                        DataTypeValidator().external_error_details(
-                            {key: f"Missing required field. ({key})"})
-
-                for key, inside_value in self.value[item].items():
-                    if self.schema.get(key):
-                        datatype = self.schema[key]['type']
-                        DataTypeValidator().initialize_datatype(datatype=datatype, value=inside_value,
-                                                                key=key,
-                                                                regex=self.schema[key].get('regex'),
-                                                                predefined_constants=self.schema[key].get(
-                                                                    'predefined_constants'),
-                                                                multi_datatype=self.schema[key].get(
-                                                                    'multi_datatype'),
-                                                                constant=self.schema[key].get('constant'),
-                                                                ref=self.schema[key].get('ref'))
+        return self.validate_msg
 
 
 class DataTypeValidator:
     """Validate all data types"""
 
     def __init__(self):
+        self.key_tree = None
         self.predefined_constants = None
         self.multi_datatype = None
         self.key = None
@@ -99,14 +118,15 @@ class DataTypeValidator:
     def initialize_datatype(self, datatype, value, key,
                             regex=None, predefined_constants=None,
                             multi_datatype=None,
-                            constant=None, ref=None):
+                            constant=None, ref=None, key_tree=None):
         """Initialize datatype"""
         default = "incorrect_datatype"
         if ref:
-            TermValidator().initialize_term(datatype=datatype, term=ref, value=value, key=key)
+            TermValidator().initialize_term(datatype=datatype, term=ref, value=value, key=key, key_tree=key_tree)
         self.value = value
         self.regex = regex
         self.key = key
+        self.key_tree = key_tree
         self.predefined_constants = predefined_constants
         self.multi_datatype = multi_datatype
         self.constant = constant
@@ -118,33 +138,44 @@ class DataTypeValidator:
 
         if str_check:
             if self.regex and not case_regex(self.value, self.regex):
-                error_details[self.key] = "Regex not matched."
+                self.key_tree = self.key_tree if self.key_tree else self.key
+                error_details[self.key_tree] = "Regex not matched."
 
             if self.constant and not constant_validator(self.value, self.constant):
-                error_details[self.key] = f"Constant not matched ({self.constant})."
+                self.key_tree = self.key_tree if self.key_tree else self.key
+                error_details[self.key_tree] = f"Constant not matched ({self.constant})."
         else:
-            error_details[self.key] = "Only allowed string data type."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed string data type."
 
-        return error_details.get(self.key)
+        return error_details.get(self.key_tree)
 
     def case_integer(self):
         """Validate integer data type"""
+
         int_check = isinstance(self.value, int)
+
         if int_check:
             if self.constant and not constant_validator(self.value, self.constant):
-                error_details[self.key] = f"Constant not matched ({self.constant})."
-        else:
-            error_details[self.key] = "Only allowed integer data type."
+                self.key_tree = self.key_tree if self.key_tree else self.key
+                error_details[self.key_tree] = f"Constant not matched ({self.constant})."
 
-        return error_details.get(self.key)
+        else:
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed integer data type."
+
+        return error_details.get(self.key_tree)
 
     def case_positive_int(self):
+        """Validate integer data type"""
+
         if isinstance(self.value, int) and self.value > 0:
             ...
         else:
-            error_details[self.key] = "Only allowed positive integer data type."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed positive integer data type."
 
-        return error_details.get(self.key)
+        return error_details.get(self.key_tree)
 
     def case_integer64(self):
         """Validate integer data type"""
@@ -152,8 +183,10 @@ class DataTypeValidator:
 
     def case_decimal(self):
         """Validate decimal data type"""
+
         if not Decimal(self.value):
-            error_details[self.key] = "Only allowed decimal data type."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed decimal data type."
 
     def case_markdown(self):
         """Validate markdown data type"""
@@ -169,53 +202,68 @@ class DataTypeValidator:
 
     def case_string_array(self):
         """Validate array string data type"""
+
         if not isinstance(self.value, list):
-            error_details[self.key] = "Only allowed array data type."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed array data type."
         else:
             res = False in [isinstance(i, str) for i in self.value]
             if res:
-                error_details[self.key] = "Only allowed array contains string data type."
+                self.key_tree = self.key_tree if self.key_tree else self.key
+                error_details[self.key_tree] = "Only allowed array contains string data type."
 
-        return error_details.get(self.key)
+        return error_details.get(self.key_tree)
 
     def case_date(self):
         """Validate date data type"""
+
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
             ...
         else:
-            error_details[self.key] = "Invalid date format."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Invalid date format."
 
-        return error_details.get(self.key)
+        return error_details.get(self.key_tree)
 
     def case_date_time(self):
         """Validate date time data type"""
+
         if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
             ...
         else:
-            error_details[self.key] = "Invalid date time format."
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Invalid date time format."
 
-        return error_details.get(self.key)
+        return error_details.get(self.key_tree)
 
     def case_boolean(self):
         """Validate boolean data type"""
-        if not isinstance(self.value, bool):
-            error_details[self.key] = "Only allowed boolean data type."
 
-        return error_details.get(self.key)
+        if not isinstance(self.value, bool):
+            self.key_tree = self.key_tree if self.key_tree else self.key
+
+            error_details[self.key_tree] = "Only allowed boolean data type."
+
+        return error_details.get(self.key_tree)
 
     def case_predefined_constants(self):
         """Validate predefined constants"""
+
         if isinstance(self.value, str) and self.value in self.predefined_constants:
             ...
         else:
-            error_details[
-                self.key] = (f"Chosen value is not in predefined"
-                             f" constants {tuple(self.predefined_constants)}.")
 
-        return error_details.get(self.key)
+            self.key_tree = self.key_tree if self.key_tree else self.key
+
+            error_details[
+                self.key_tree] = (f"Chosen value is not in predefined"
+                                  f" constants {tuple(self.predefined_constants)}.")
+
+        return error_details.get(self.key_tree)
 
     def case_multi_datatype(self):
         """Validate multiple data type"""
+
         checklist = []
         datatype_store = []
 
@@ -229,7 +277,11 @@ class DataTypeValidator:
                     error_details.pop(self.key)
 
         if True not in checklist:
-            error_details[self.key] = "Only allowed data type is " + str(tuple(datatype_store))
+            self.key_tree = self.key_tree if self.key_tree else self.key
+
+            error_details[self.key_tree] = "Only allowed data type is " + str(tuple(datatype_store))
+
+        return error_details.get(self.key_tree)
 
     def external_error_details(self, external_error):
         """Update error details"""
