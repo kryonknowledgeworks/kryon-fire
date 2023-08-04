@@ -1,0 +1,19 @@
+{
+  "other": {
+    "type": "string",
+    "cardinality": "1..1",
+    "description": "Another resource that this resource is related to.",
+    "regex": "(Patient|RelatedPerson)/\\w+"
+  },
+  "type": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "replaced-by",
+      "replaces",
+      "refer",
+      "seealso"
+    ],
+    "cardinality": "1..1",
+    "description": "The type of link between this patient resource and another patient resource."
+  }
+}
