@@ -18,19 +18,21 @@ class Patient(DomainResource):
     def do_validate(self):
         """This method validates the resource"""
         for key in self.schema.keys():
-            if self.schema[key].get('cardinality') == '1..1' and not self.resource.get(key):
+            if self.schema.get(key).get('cardinality') == '1..1' and not self.resource.get(key):
                 DataTypeValidator().external_error_details({key: f"Missing required field. ({key})"})
 
-            if self.resource.get(key):
-                datatype = self.schema[key]['type']
+        for key, value in self.resource.items():
 
-                DataTypeValidator().initialize_datatype(datatype=datatype, value=self.resource[key], key=key,
-                                                        regex=self.schema.get(key=key).get('regex'),
-                                                        predefined_constants=self.schema.get(key=key).get(
+            if self.schema.get(key):
+                datatype = self.schema.get(key)['type']
+
+                DataTypeValidator().initialize_datatype(datatype=datatype, value=value, key=key,
+                                                        regex=self.schema[key].get('regex'),
+                                                        predefined_constants=self.schema[key].get(
                                                             'predefined_constants'),
-                                                        multi_datatype=self.schema.get(key=key).get('multi_datatype'),
-                                                        constant=self.schema.get(key=key).get('constant'))
-
+                                                        multi_datatype=self.schema[key].get('multi_datatype'),
+                                                        constant=self.schema[key].get('constant'),
+                                                        ref=self.schema[key].get('ref'))
     def validation_result(self):
         """This method returns the validation report"""
         self.validation_report = DataTypeValidator().validation_report()
