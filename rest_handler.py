@@ -1,22 +1,8 @@
-from core.resources.Organization import Organization
-from core.resources.Patient import Patient
-from core.resources.Practitioner import Practitioner
+""" This module is used to handle the REST API requests. """
+from core.resources.Resource_handler import ResourceHandler
 
 
 def add_resource(resource_type: str, json):
-    if resource_type.lower() == 'patient':
-        patient = Patient(json)
-        validation_result = patient.validation_result()
-        return validation_result
-
-    elif resource_type.lower() == 'practitioner':
-        practitioner = Practitioner(json)
-        validation_result = practitioner.validation_result()
-        return validation_result
-
-    elif resource_type.lower() == 'organization':
-        organization = Organization(json)
-        validation_result = organization.validation_result()
-        return validation_result
-
-
+    resource_handler = ResourceHandler(json, resource_type.lower())
+    validation_result = resource_handler.validation_result()
+    return validation_result

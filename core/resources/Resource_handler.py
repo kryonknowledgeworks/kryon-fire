@@ -4,15 +4,15 @@ from core.utils.validator import DataTypeValidator
 from core.utils.vars import get_resource_schema
 
 
-class Patient(DomainResource):
+class ResourceHandler(DomainResource):
     """This class validates the Patient resource"""
 
-    def __init__(self, resource):
+    def __init__(self, resource, resource_type):
         self.validation_report = None
         print("From ===> class Patient")
         super().__init__(resource)
         self.resource = resource
-        self.schema = get_resource_schema("patient")
+        self.schema = get_resource_schema(resource_type)
         self.do_validate()
 
     def do_validate(self):
@@ -33,6 +33,7 @@ class Patient(DomainResource):
                                                         multi_datatype=self.schema[key].get('multi_datatype'),
                                                         constant=self.schema[key].get('constant'),
                                                         ref=self.schema[key].get('ref'))
+
     def validation_result(self):
         """This method returns the validation report"""
         self.validation_report = DataTypeValidator().validation_report()
