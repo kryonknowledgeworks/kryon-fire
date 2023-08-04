@@ -1,0 +1,14 @@
+{
+  "language": {
+    "type": "object",
+    "cardinality": "1..1",
+    "description": "The language which can be used to communicate with the patient about his or her health.",
+    "ref": "codeable_concept"
+  },
+  "preferred": {
+     "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Indicates whether or not the language is preferred.",
+    "regex": "true|false"
+  }
+}

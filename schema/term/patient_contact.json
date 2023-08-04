@@ -1,0 +1,46 @@
+{
+  "relationship": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "The nature of the relationship between a patient and the related person.",
+    "ref": "codeable_concept"
+  },
+  "name": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "A name associated with the person.",
+    "ref": "human_name"
+  },
+  "telecom":{
+     "type": "array",
+    "cardinality": "0..*",
+    "description": "A contact detail for the person, e.g. a telephone number or an email address.",
+    "ref": "contact_point"
+  },
+  "address": {
+     "type": "object",
+    "cardinality": "0..1",
+    "description": "Address where the related person can be contacted or visited.",
+    "ref": "address"
+  },
+  "gender": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+     "male", "female", "other", "unknown"
+    ],
+    "cardinality": "0..1",
+    "description": "Administrative Gender - the gender that the contact person is considered to have for administration and record keeping purposes.",
+  },
+  "organization": {
+     "type": "string",
+    "cardinality": "0..1",
+    "description": "Organization on behalf of which the contact is acting or for which the contact is working.",
+    "regex": "Organization/\\w+"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Address where the related person can be contacted or visited.",
+    "ref": "period"
+  }
+}

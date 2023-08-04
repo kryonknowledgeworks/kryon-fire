@@ -12,14 +12,33 @@
     "description": "Applications can assume that an identifier is permanent unless it explicitly says that it is temporary."
   },
   "type": {
-    "TBU": "TBU"
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "A coded type for the identifier that can be used to determine which identifier to use for a specific purpose.  (e.g. driver's license number, passport number, etc.)",
+    "ref": "codeable_concept"
   },
-  "system": "<uri>",
-  "value": "<string>",
+  "system": {
+    "type": "uri",
+    "cardinality": "0..1",
+    "description": "The namespace for the identifier value.  This can be any kind of URI (urn:oid:...)",
+    "regex": "\\S*"
+  },
+  "value": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The portion of the identifier typically relevant to the user and which is unique within the context of the system.",
+    "regex": "^[\\s\\S]+$"
+  },
   "period": {
-    "TBU": "TBU"
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Time period during which identifier is/was valid for use.",
+    "ref": "period"
   },
   "assigner": {
-    "TBU": "TBU"
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Organization that issued/manages the identifier.",
+    "regex": "Organization/\\w+"
   }
 }

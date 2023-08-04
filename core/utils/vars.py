@@ -26,3 +26,18 @@ def build_schema_ref_path(resource_ref: str):
     if resource_ref.startswith('#/'):
         return resource_ref[2:].replace('/', '.')
     return resource_ref
+
+
+def change_datatype_valid_format(datatype):
+    if datatype == "string":
+        return str
+    elif datatype == "integer":
+        return int
+    elif datatype == "boolean":
+        return bool
+    elif datatype == "float":
+        return float
+    elif datatype == "array":
+        return list
+    elif datatype == "object":
+        return dict
