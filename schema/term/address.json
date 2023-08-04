@@ -1,0 +1,72 @@
+{
+  "use": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "home",
+      "work",
+      "temp",
+      "old",
+      "billing"
+    ],
+    "cardinality": "0..1",
+    "description": "The purpose of this contact point."
+  },
+  "type": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "postal",
+      "physical",
+      "both"
+    ],
+    "cardinality": "0..1",
+    "description": "Distinguishes between physical addresses (those you can visit) and mailing addresses (e.g. PO Boxes and care-of addresses). Most addresses are both."
+  },
+  "text": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A human readable string representing the address.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "line": {
+    "type": "string_array",
+    "cardinality": "0..*",
+    "description": "This component contains the house number, apartment number, street name, street direction, P.O. Box number, delivery hints, and similar address information.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "city": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The name of the city, town, village or other community or delivery center.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "district": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The name of the administrative area (county).",
+    "regex": "^[\\s\\S]+$"
+  },
+  "state": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Sub-unit of a country with limited sovereignty in a federally organized country. A code may be used if codes are in common use (e.g. US 2 letter state codes).",
+    "regex": "^[\\s\\S]+$"
+  },
+  "postalCode": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A postal code designating a region defined by the postal service.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "country": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A postal code designating a region defined by the postal service.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Time period when address was/is in use.",
+    "ref": "period"
+  }
+}
