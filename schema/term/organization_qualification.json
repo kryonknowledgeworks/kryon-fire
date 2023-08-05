@@ -1,0 +1,26 @@
+{
+  "identifier": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "An identifier for this qualification for the practitioner.",
+    "ref": "identifier"
+  },
+  "code": {
+    "type": "object",
+    "cardinality": "1..1",
+    "description": "Coded representation of the qualification.",
+    "ref": "codeable_concept"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Period during which the qualification is valid.",
+    "ref": "period"
+  },
+  "issuer": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Organization that regulates and issues the qualification.",
+    "regex": "Organization/\\w+"
+  }
+}

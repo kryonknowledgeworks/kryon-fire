@@ -1,0 +1,38 @@
+{
+  "purpose": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The purpose of this contact point.",
+    "ref": "codeable_concept"
+  },
+  "name": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "A name associated with the contact point.",
+    "ref": "human_name"
+  },
+  "telecom": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "A contact detail (e.g. a telephone number or an email address) by which the party may be contacted.",
+    "ref": "contact_point"
+  },
+  "address": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Visiting or postal addresses for the contact.",
+    "ref": "address"
+  },
+  "organization": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Organization that is associated with the contact point.",
+    "regex": "Organization/\\w+"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The period during which this contact point is valid.",
+    "ref": "period"
+  }
+}
