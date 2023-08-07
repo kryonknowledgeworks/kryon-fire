@@ -32,7 +32,8 @@ class ResourceHandler(DomainResource):
                                                             'predefined_constants'),
                                                         multi_datatype=self.schema[key].get('multi_datatype'),
                                                         constant=self.schema[key].get('constant'),
-                                                        ref=self.schema[key].get('ref'))
+                                                        ref=self.schema[key].get('ref'),
+                                                        inside_type=self.schema[key].get('inside_type'))
 
     def validation_result(self):
         """This method returns the validation report"""
