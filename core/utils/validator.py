@@ -190,7 +190,7 @@ class DataTypeValidator:
 
     def case_integer64(self):
         """Validate integer data type"""
-        self.case_integer()
+        return self.case_integer()
 
     def case_decimal(self):
         """Validate decimal data type"""
@@ -198,6 +198,19 @@ class DataTypeValidator:
         if not Decimal(self.value):
             self.key_tree = self.key_tree if self.key_tree else self.key
             error_details[self.key_tree] = "Only allowed decimal data type."
+
+        return error_details.get(self.key_tree)
+
+    def case_unsigned_int(self):
+        """Validate integer data type"""
+
+        if isinstance(self.value, int) and self.value >= 0:
+            ...
+        else:
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Only allowed unsigned integer data type."
+
+        return error_details.get(self.key_tree)
 
     def case_markdown(self):
         """Validate markdown data type"""
@@ -251,6 +264,16 @@ class DataTypeValidator:
         else:
             self.key_tree = self.key_tree if self.key_tree else self.key
             error_details[self.key_tree] = "Invalid date time format."
+
+        return error_details.get(self.key_tree)
+
+    def case_time(self):
+        """Validate time data type"""
+        if isinstance(self.value, str) and re.fullmatch(self.regex, self.value):
+            ...
+        else:
+            self.key_tree = self.key_tree if self.key_tree else self.key
+            error_details[self.key_tree] = "Invalid time format."
 
         return error_details.get(self.key_tree)
 
