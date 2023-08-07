@@ -1,0 +1,14 @@
+{
+  "use": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Reason the encounter takes place (core or reference)",
+    "ref": "codeable_concept"
+  },
+  "value": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "Value of the encounter reason (core or reference)",
+    "regex": "(Condition|DiagnosticReport|ImmunizationRecommendation|Observation|Procedure)/\\w+"
+  }
+}

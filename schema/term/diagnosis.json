@@ -1,0 +1,8 @@
+{
+  "use": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Indicates the purpose of the encounter (e.g. admission, billing, discharge …).",
+    "ref": "codeable_concept"
+  }
+}

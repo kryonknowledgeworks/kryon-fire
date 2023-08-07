@@ -1,0 +1,38 @@
+{
+  "preAdmissionIdentifier": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The identifier of the encounter that this episode of care is intended to be replacing",
+    "ref": "identifier"
+  },
+  "origin": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The ReferralRequest that initiated this episode of care",
+    "regex": "(Location|Organization)/\\w+"
+  },
+  "admitSource": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "From where patient was admitted (physician referral, transfer)",
+    "ref": "codeable_concept"
+  },
+  "reAdmission": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Indicates that the patient is being re-admitted",
+    "ref": "codeable_concept"
+  },
+  "destination": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The location to which the patient is discharged",
+    "regex": "(Location|Organization)/\\w+"
+  },
+  "dischargeDisposition": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Category or kind of location after discharge",
+    "ref": "codeable_concept"
+  }
+}

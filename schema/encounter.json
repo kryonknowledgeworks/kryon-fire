@@ -1,0 +1,175 @@
+{
+  "resourceType": {
+    "type": "string",
+    "constant": "Encounter",
+    "description": "Type of resource this is.",
+    "cardinality": "0..*",
+    "regex": "^[\\s\\S]+$"
+  },
+  "identifier": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Identifier(s) by which this encounter is known.",
+    "ref": "identifier"
+  },
+  "status": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "planned",
+      "in-progress",
+      "on-hold",
+      "discharged",
+      "completed",
+      "cancelled",
+      "discontinued",
+      "entered-in-error",
+      "unknown"
+    ],
+    "cardinality": "1..1",
+    "description": "The current state of the encounter (not the state of the patient within the encounter - that is subjectState)."
+  },
+  "class": {
+    "type": "array",
+    "cardinality": "0..1",
+    "description": "Concepts representing classification of patient encounter such as ambulatory (outpatient), inpatient, emergency, home health or others due to local variations.",
+    "ref": "codeable_concept"
+  },
+  "priority": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Indicates the urgency of the encounter.",
+    "ref": "codeable_concept"
+  },
+  "type": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Specific type of encounter (e.g. e-mail consultation, surgical day-care, skilled nursing, rehabilitation).",
+    "ref": "codeable_concept"
+  },
+  "subject": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The patient ro group present at the encounter.",
+    "regex": "(Group|Patient)/\\w+"
+  },
+  "subjectStatus": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The status of the patient within the encounter.",
+    "ref": "codeable_concept"
+  },
+  "episodeOfCare": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "The EpisodeOfCare that this encounter is a part of.",
+    "regex": "EpisodeOfCare/\\w+"
+  },
+  "basedOn": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "The patient ro group present at the encounter.",
+    "regex": "(CarePlan|DeviceRequest|MedicationRequest|ServiceRequest)/\\w+"
+  },
+  "careTeam": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "The patient ro group present at the encounter.",
+    "regex": "CareTeam/\\w+"
+  },
+  "partOf": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Another Encounter this encounter is part of.",
+    "regex": "Encounter/\\w+"
+  },
+  "serviceProvider": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Another Encounter this encounter is part of.",
+    "regex": "Organization/\\w+"
+  },
+  "participant": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "The list of people responsible for providing the service.",
+    "ref": "participant"
+  },
+  "appointment": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "The appointment that scheduled this encounter.",
+    "regex": "Appointment/\\w+"
+  },
+  "virtualService": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "The list of people responsible for providing the service.",
+    "ref": "virtual_service_detail"
+  },
+  "actualPeriod": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The start and end time of the encounter.",
+    "ref": "period"
+  },
+  "plannedStartDate": {
+    "type": "date_time",
+    "cardinality": "0..1",
+    "description": "The start and end time of the encounter.",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"
+  },
+  "plannedEndDate": {
+    "type": "date_time",
+    "cardinality": "0..1",
+    "description": "The start and end time of the encounter.",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?"
+  },
+  "reason": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Reason the encounter takes place (core or reference).",
+    "ref": "reason"
+  },
+  "diagnosis": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Reason the encounter takes place (core or reference).",
+    "ref": "reason"
+  },
+  "account": {
+    "type": "string",
+    "cardinality": "0..*",
+    "description": "The set of accounts that may be used for billing for this Encounter.",
+    "regex": "Account/\\w+"
+  },
+  "dietPreference": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Diet preferences reported by the patient.",
+    "ref": "codeable_concept"
+  },
+  "specialArrangement": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Special courtesies (VIP, board member).",
+    "ref": "codeable_concept"
+  },
+  "specialCourtesy": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Special courtesies (VIP, board member).",
+    "ref": "codeable_concept"
+  },
+  "admission": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Details about the admission to a healthcare service.",
+    "ref": "admission"
+  },
+  "location": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "List of locations where the patient has been during this encounter.",
+    "ref": "location"
+  }
+}

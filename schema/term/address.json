@@ -28,10 +28,11 @@
     "regex": "^[\\s\\S]+$"
   },
   "line": {
-    "type": "string_array",
+    "type": "inside_array",
     "cardinality": "0..*",
     "description": "This component contains the house number, apartment number, street name, street direction, P.O. Box number, delivery hints, and similar address information.",
-    "regex": "^[\\s\\S]+$"
+    "regex": "^[\\s\\S]+$",
+    "inside_type": "string"
   },
   "city": {
     "type": "string",

@@ -1,0 +1,53 @@
+{
+  "channelType": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The type of channel to be used for telehealth",
+    "ref": "coding"
+  },
+  "addressUrl": {
+    "type": "url",
+    "cardinality": "0..1",
+    "description": "The channel url",
+    "regex": "\\S*"
+  },
+  "addressString": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "The channel url",
+    "regex": "^[\\s\\S]+$"
+  },
+  "addressContactPoint": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The channel url",
+    "ref": "contact_point"
+  },
+  "addressExtendedContactDetail": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The channel url",
+    "ref": "extended_contact_detail"
+  },
+  "additionalInfo": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "Additional information about the channel",
+    "regex": "\\S*",
+    "inside_type": "string"
+  },
+  "maxParticipants": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "The maximum number of participants that can be connected to the session",
+    "regex": "[1-9][0-9]*"
+  },
+  "sessionKey": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A unique identifier for the session",
+    "regex": "^[\\s\\S]+$"
+  }
+}
+
+

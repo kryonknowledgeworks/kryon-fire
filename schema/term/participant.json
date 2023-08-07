@@ -1,0 +1,20 @@
+{
+  "type": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Role of participant in encounter",
+    "ref": "codeable_concept"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Period of time during the encounter that the participant participated",
+    "ref": "period"
+  },
+  "actor": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Persons involved in the encounter other than the patient",
+    "regex": "(Device|Group|HealthcareService|Patient|Practitioner|PractitionerRole|RelatedPerson)/\\w+"
+  }
+}
