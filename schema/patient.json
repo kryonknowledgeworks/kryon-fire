@@ -102,16 +102,18 @@
     "ref": "communication"
   },
   "generalPractitioner": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "Patient's nominated primary care provider.",
-    "regex": "(Organization|Practitioner|PractitionerRole)/\\w+"
+    "ref_regex": "^(Organization|Practitioner|PractitionerRole).*",
+    "ref": "reference"
   },
   "managingOrganization": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Organization that is the custodian of the patient record.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   },
   "link": {
     "type": "array",
