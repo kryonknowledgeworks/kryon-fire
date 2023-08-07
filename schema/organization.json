@@ -31,10 +31,11 @@
     "regex": "^[\\s\\S]+$"
   },
   "alias": {
-    "type": "string_array",
+    "type": "inside_array",
     "cardinality": "0..*",
     "description": "A list of alternate names that the organization is known as, or was known as in the past.",
-    "regex": "^[\\s\\S]+$"
+    "regex": "^[\\s\\S]+$",
+    "inside_type": "string"
   },
   "description": {
     "type": "markdown",
@@ -64,6 +65,6 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "A contact detail for the organization.",
-    "ref": "organization_qualification"
+    "ref": "qualification"
   }
 }

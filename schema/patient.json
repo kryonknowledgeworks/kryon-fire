@@ -99,7 +99,7 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "A language which may be used to communicate with the patient about his or her health.",
-    "ref": "patient_communication"
+    "ref": "communication"
   },
   "generalPractitioner": {
     "type": "string",
