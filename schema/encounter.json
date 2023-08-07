@@ -46,6 +46,12 @@
     "description": "Specific type of encounter (e.g. e-mail consultation, surgical day-care, skilled nursing, rehabilitation).",
     "ref": "codeable_concept"
   },
+  "serviceType": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Broad categorization of the service that is to be provided (e.g. cardiology).",
+    "ref": "codeable_reference"
+  },
   "subject": {
     "type": "string",
     "cardinality": "0..1",

@@ -4,5 +4,11 @@
     "cardinality": "0..*",
     "description": "Indicates the purpose of the encounter (e.g. admission, billing, discharge …).",
     "ref": "codeable_concept"
+  },
+  "condition": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Reason the encounter takes place, expressed as a Condition or Procedure.",
+    "ref": "codeable_reference"
   }
 }

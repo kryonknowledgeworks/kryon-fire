@@ -1,0 +1,14 @@
+{
+  "concept" : {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The concept represented by this code.",
+    "ref": "codeable_concept"
+  },
+  "reference" :{
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "A reference to a code defined by a terminology system.",
+    "ref": "reference"
+  }
+}
