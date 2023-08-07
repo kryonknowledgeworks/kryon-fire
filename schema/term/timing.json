@@ -1,0 +1,21 @@
+{
+  "event": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A list of event definitions that describe when the event occurs.",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1])(T([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?)?)?(Z|(\\+|-)((0[0-9]|1[0-3]):[0-5][0-9]|14:00)?)?)?",
+    "inside_type": "string"
+  },
+  "repeat": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "An optional value describing when the event should occur.",
+    "ref": "timing_repeat"
+  },
+  "code": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "A code for the event being defined.",
+    "ref": "codeable_concept"
+  }
+}

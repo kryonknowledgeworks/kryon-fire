@@ -1,0 +1,14 @@
+{
+  "low": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Low limit",
+    "ref": "quantity"
+  },
+  "high": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "High limit",
+    "ref": "quantity"
+  }
+}

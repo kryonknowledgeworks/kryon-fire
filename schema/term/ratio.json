@@ -1,0 +1,14 @@
+{
+  "numerator": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Numerator value",
+    "ref": "quantity"
+  },
+  "denominator": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Denominator value",
+    "ref": "quantity"
+  }
+}

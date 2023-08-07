@@ -1,0 +1,123 @@
+{
+  "boundsDuration": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Length/Range of lengths, or (Start and/or end) limits",
+    "ref": "duration"
+  },
+  "boundsRange": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Length/Range of lengths, or (Start and/or end) limits",
+    "ref": "range"
+  },
+  "boundsPeriod": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Length/Range of lengths, or (Start and/or end) limits",
+    "ref": "period"
+  },
+  "count": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Number of times to repeat",
+    "regex": "[1-9][0-9]*"
+  },
+  "countMax": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Maximum number of times to repeat",
+    "regex": "[1-9][0-9]*"
+  },
+  "duration": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "How long when it happens",
+    "regex": "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?"
+  },
+  "durationMax": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "How long when it happens (Max)",
+    "regex": "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?"
+  },
+  "durationUnit": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "s",
+      "min",
+      "h",
+      "d",
+      "wk",
+      "mo",
+      "a"
+    ],
+    "cardinality": "0..1",
+    "description": "s | min | h | d | wk | mo | a"
+  },
+  "frequency": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Event occurs frequency times per period",
+    "regex": "[1-9][0-9]*"
+  },
+  "frequencyMax": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Event occurs up to frequencyMax times per period",
+    "regex": "[1-9][0-9]*"
+  },
+  "period": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "Event occurs frequency times per period",
+    "regex": "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?"
+  },
+  "periodMax": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "Upper limit of period (3-4 hours)",
+    "regex": "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?"
+  },
+  "periodUnit": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "s",
+      "min",
+      "h",
+      "d",
+      "wk",
+      "mo",
+      "a"
+    ],
+    "cardinality": "0..1",
+    "description": "s | min | h | d | wk | mo | a"
+  },
+  "dayOfWeek": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A list of event definitions that describe when the event occurs.",
+    "regex": "(mon|tue|wed|thu|fri|sat|sun)",
+    "inside_type": "string"
+  },
+  "timeOfDay": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A list of event definitions that describe when the event occurs.",
+    "regex": "([01][0-9]|2[0-3]):[0-5][0-9]:([0-5][0-9]|60)(\\.[0-9]{1,9})?",
+    "inside_type": "string"
+  },
+  "when": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A list of event definitions that describe when the event occurs.",
+    "regex": "[^\\s]+( [^\\s]+)*",
+    "inside_type": "string"
+  },
+  "offset": {
+    "type": "unsigned_int",
+    "cardinality": "0..1",
+    "description": "Minutes from event (before or after)",
+    "regex": "[0]|([1-9][0-9]*)"
+  }
+}

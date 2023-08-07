@@ -30,14 +30,14 @@
     "cardinality": "0..*",
     "description": "The given name portion of the name.",
     "regex": "^[\\s\\S]+$",
-     "inside_type": "string"
+    "inside_type": "string"
   },
   "prefix": {
     "type": "inside_array",
     "cardinality": "0..*",
     "description": "The prefix portion of the name.",
     "regex": "^[\\s\\S]+$",
-     "inside_type": "string"
+    "inside_type": "string"
   },
   "suffix": {
     "type": "inside_array",
