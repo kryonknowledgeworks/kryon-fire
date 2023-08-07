@@ -1,0 +1,26 @@
+{
+  "reference" : {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Literal reference, Relative, internal or absolute URL",
+    "regex": "^[\\s\\S]+$"
+  },
+  "type" : {
+    "type": "uri",
+    "cardinality": "0..1",
+    "description": "Type the reference refers to (e.g. \"Patient\") - must be a resource in resources",
+    "regex": "^[\\s\\S]+$"
+  },
+  "identifier" : {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Logical id of this artifact",
+    "ref": "identifier"
+  },
+  "display" : {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "Text alternative for the resource",
+    "regex": "^[\\s\\S]+$"
+  }
+}

@@ -6,9 +6,9 @@
     "ref": "codeable_concept"
   },
   "value": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
-    "description": "Value of the encounter reason (core or reference)",
-    "regex": "(Condition|DiagnosticReport|ImmunizationRecommendation|Observation|Procedure)/\\w+"
+    "description": "Value of the reason (core or reference)",
+    "ref": "codeable_reference"
   }
 }
