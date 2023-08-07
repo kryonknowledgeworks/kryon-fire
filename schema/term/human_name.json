@@ -26,22 +26,25 @@
     "regex": "^[\\s\\S]+$"
   },
   "given": {
-    "type": "string_array",
+    "type": "inside_array",
     "cardinality": "0..*",
     "description": "The given name portion of the name.",
-    "regex": "^[\\s\\S]+$"
+    "regex": "^[\\s\\S]+$",
+     "inside_type": "string"
   },
   "prefix": {
-    "type": "string_array",
+    "type": "inside_array",
     "cardinality": "0..*",
     "description": "The prefix portion of the name.",
-    "regex": "^[\\s\\S]+$"
+    "regex": "^[\\s\\S]+$",
+     "inside_type": "string"
   },
   "suffix": {
-    "type": "string_array",
+    "type": "inside_array",
     "cardinality": "0..*",
     "description": "The suffix portion of the name.",
-    "regex": "^[\\s\\S]+$"
+    "regex": "^[\\s\\S]+$",
+    "inside_type": "string"
   },
   "period": {
     "type": "object",

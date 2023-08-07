@@ -1,0 +1,31 @@
+{
+  "location": {
+    "type": "string",
+    "cardinality": "1..1",
+    "description": "The set of accounts that may be used for billing for this Encounter.",
+    "regex": "Location/\\w+"
+  },
+  "status": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "planned",
+      "active",
+      "reserved",
+      "completed"
+    ],
+    "cardinality": "0..1",
+    "description": "The set of accounts that may be used for billing for this Encounter."
+  },
+  "form": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The set of accounts that may be used for billing for this Encounter.",
+    "ref": "codeable_concept"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The set of accounts that may be used for billing for this Encounter.",
+    "ref": "period"
+  }
+}
