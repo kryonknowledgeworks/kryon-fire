@@ -1,0 +1,14 @@
+{
+  "parameterFocus": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "A code that identifies a particular service (i.e., procedure, diagnostic investigation, or panel of investigations) that have been requested.",
+    "ref": "codeable_reference"
+  },
+  "parameter": {
+    "type": "array",
+    "cardinality": "1..*",
+    "description": "The parameter details for the service being requested",
+    "ref": "parameter"
+  }
+}

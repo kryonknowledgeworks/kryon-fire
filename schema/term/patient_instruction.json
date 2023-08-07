@@ -1,0 +1,14 @@
+{
+  "instructionMarkdown": {
+    "type": "markdown",
+    "cardinality": "0..1",
+    "description": "Markdown-formatted text to display to the user.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "instructionReference": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A reference to a document to be used as the instruction for the task.",
+    "regex": "DocumentReference/\\w+"
+  }
+}

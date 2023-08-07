@@ -1,0 +1,38 @@
+{
+  "value": {
+    "type": "decimal",
+    "cardinality": "0..1",
+    "description": "A decimal value.",
+    "regex": "-?(0|[1-9][0-9]{0,17})(\\.[0-9]{1,17})?([eE][+-]?[0-9]{1,9}})?"
+  },
+  "comparator": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "\u003c",
+      "\u003c\u003d",
+      "\u003e\u003d",
+      "\u003e",
+      "ad"
+    ],
+    "cardinality": "0..1",
+    "description": "A comparator for the value."
+  },
+  "unit": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "A unit for the value.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "system": {
+    "type": "uri",
+    "cardinality": "0..1",
+    "description": "The identification of the source system of the value.",
+    "regex": "\\S*"
+  },
+  "code": {
+    "type": "code",
+    "cardinality": "0..1",
+    "description": "The identification of the source code system of the value.",
+    "regex": "[^\\s]+( [^\\s]+)*"
+  }
+}
