@@ -28,7 +28,9 @@
             "enum": [
               "Patient",
               "Practitioner",
-              "Organization"
+              "Organization",
+              "Encounter",
+              "serviceRequest"
             ],
             "required": true,
             "description": "type of resource"
