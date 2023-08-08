@@ -35,10 +35,11 @@
     "description": "Administrative Gender - the gender that the contact person is considered to have for administration and record keeping purposes."
   },
   "organization": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Organization on behalf of which the contact is acting or for which the contact is working.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   },
   "period": {
     "type": "object",

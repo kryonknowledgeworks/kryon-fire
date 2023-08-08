@@ -1,9 +1,10 @@
 {
   "location": {
-    "type": "string",
+    "type": "object",
     "cardinality": "1..1",
     "description": "The set of accounts that may be used for billing for this Encounter.",
-    "regex": "Location/\\w+"
+    "ref_regex": "^Location.*",
+    "ref": "reference"
   },
   "status": {
     "type": "predefined_constants",

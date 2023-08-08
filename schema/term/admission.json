@@ -6,10 +6,11 @@
     "ref": "identifier"
   },
   "origin": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "The ReferralRequest that initiated this episode of care",
-    "regex": "(Location|Organization)/\\w+"
+    "ref_regex": "^(Location|Organization).*",
+    "ref": "reference"
   },
   "admitSource": {
     "type": "object",
@@ -24,10 +25,11 @@
     "ref": "codeable_concept"
   },
   "destination": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "The location to which the patient is discharged",
-    "regex": "(Location|Organization)/\\w+"
+    "ref_regex": "^(Location|Organization).*",
+    "ref": "reference"
   },
   "dischargeDisposition": {
     "type": "object",
