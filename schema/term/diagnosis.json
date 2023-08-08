@@ -9,6 +9,7 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "Reason the encounter takes place, expressed as a Condition or Procedure.",
-    "ref": "codeable_reference"
+    "ref": "codeable_reference",
+    "ref_regex": "^Condition.*"
   }
 }

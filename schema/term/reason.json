@@ -9,6 +9,7 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "Value of the reason (core or reference)",
-    "ref": "codeable_reference"
+    "ref": "codeable_reference",
+    "ref_regex": "^(Condition|DiagnosticReport|ImmunizationRecommendation|Observation|Procedure).*"
   }
 }

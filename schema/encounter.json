@@ -50,7 +50,8 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "Broad categorization of the service that is to be provided (e.g. cardiology).",
-    "ref": "codeable_reference"
+    "ref": "codeable_reference",
+    "ref_regex": "^HealthcareService.*"
   },
   "subject": {
     "type": "object",
@@ -153,7 +154,7 @@
     "type": "array",
     "cardinality": "0..*",
     "description": "Reason the encounter takes place (core or reference).",
-    "ref": "reason"
+    "ref": "diagnosis"
   },
   "account": {
     "type": "array",
