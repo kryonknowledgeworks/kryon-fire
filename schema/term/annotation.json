@@ -1,9 +1,10 @@
 {
   "authorReference": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "The portion of the identifier typically relevant to the user and which is unique within the context of the system.",
-    "regex": "(Organization|Patient|Practitioner|PractitionerRole|RelatedPerson)/\\w+"
+    "ref_regex": "^(Organization|Patient|Practitioner|PractitionerRole|RelatedPerson).*",
+    "ref": "reference"
   },
   "authorString": {
     "type": "string",

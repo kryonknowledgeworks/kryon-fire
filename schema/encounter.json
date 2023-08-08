@@ -53,10 +53,11 @@
     "ref": "codeable_reference"
   },
   "subject": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "The patient ro group present at the encounter.",
-    "regex": "(Group|Patient)/\\w+"
+    "ref_regex": "^(Group|Patient).*",
+    "ref": "reference"
   },
   "subjectStatus": {
     "type": "object",
@@ -65,34 +66,39 @@
     "ref": "codeable_concept"
   },
   "episodeOfCare": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "The EpisodeOfCare that this encounter is a part of.",
-    "regex": "EpisodeOfCare/\\w+"
+    "ref_regex": "^EpisodeOfCare.*",
+    "ref": "reference"
   },
   "basedOn": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "The patient ro group present at the encounter.",
-    "regex": "(CarePlan|DeviceRequest|MedicationRequest|ServiceRequest)/\\w+"
+    "ref_regex": "^(CarePlan|DeviceRequest|MedicationRequest|ServiceRequest).*",
+    "ref": "reference"
   },
   "careTeam": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "The patient ro group present at the encounter.",
-    "regex": "CareTeam/\\w+"
+    "ref_regex": "^CareTeam.*",
+    "ref": "reference"
   },
   "partOf": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Another Encounter this encounter is part of.",
-    "regex": "Encounter/\\w+"
+    "ref_regex": "^Encounter.*",
+    "ref": "reference"
   },
   "serviceProvider": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Another Encounter this encounter is part of.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   },
   "participant": {
     "type": "array",
@@ -101,10 +107,11 @@
     "ref": "participant"
   },
   "appointment": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "The appointment that scheduled this encounter.",
-    "regex": "Appointment/\\w+"
+    "ref_regex": "^Appointment.*",
+    "ref": "reference"
   },
   "virtualService": {
     "type": "array",
@@ -149,10 +156,11 @@
     "ref": "reason"
   },
   "account": {
-    "type": "string",
+    "type": "array",
     "cardinality": "0..*",
     "description": "The set of accounts that may be used for billing for this Encounter.",
-    "regex": "Account/\\w+"
+    "ref_regex": "^Account.*",
+    "ref": "reference"
   },
   "dietPreference": {
     "type": "array",

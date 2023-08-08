@@ -12,9 +12,10 @@
     "ref": "period"
   },
   "actor": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Persons involved in the encounter other than the patient",
-    "regex": "(Device|Group|HealthcareService|Patient|Practitioner|PractitionerRole|RelatedPerson)/\\w+"
+    "ref_regex": "^(Device|Group|HealthcareService|Patient|Practitioner|PractitionerRole|RelatedPerson).*",
+    "ref": "reference"
   }
 }

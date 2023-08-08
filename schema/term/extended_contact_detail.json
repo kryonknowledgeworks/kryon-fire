@@ -24,10 +24,11 @@
     "ref": "address"
   },
   "organization": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Organization that is associated with the contact point.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   },
   "period": {
     "type": "object",

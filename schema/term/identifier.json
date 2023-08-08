@@ -36,9 +36,10 @@
     "ref": "period"
   },
   "assigner": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Organization that issued/manages the identifier.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   }
 }

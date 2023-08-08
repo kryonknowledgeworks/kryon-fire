@@ -22,6 +22,7 @@ class TermValidator:
     """Validate term"""
 
     def __init__(self):
+        self.ref_regex = None
         self.list_item = None
         self.validate_array_msg = None
         self.validate_msg = None
@@ -32,11 +33,12 @@ class TermValidator:
         self.key = None
         self.value = None
 
-    def initialize_term(self, datatype, term, value, key, key_tree=None, list_item=None):
+    def initialize_term(self, datatype, term, value, key, key_tree=None, list_item=None, ref_regex=None):
         """Initialize term"""
         default = "incorrect_term"
         self.value = value
         self.key = key
+        self.ref_regex = ref_regex
         self.key_tree = key_tree
         self.datatype = datatype
         self.term = term
@@ -44,6 +46,8 @@ class TermValidator:
         return getattr(self, f'case_{datatype}', lambda: default)()
 
     def case_object(self):
+        """Validate object"""
+        self.key_tree = self.key_tree if self.key_tree else self.key
 
         if not isinstance(self.value, change_datatype_valid_format(self.datatype)):
             self.key_tree = self.key_tree if self.key_tree else self.key
@@ -89,10 +93,9 @@ class TermValidator:
                                                                                 ref=self.schema[key].get('ref'),
                                                                                 key_tree=self.key_tree,
                                                                                 inside_type=self.schema[key].get(
-                                                                                    'inside_type'))
-
-                    if self.validate_msg is None:
-                        self.key_tree = self.key_tree.replace(adding_msg, "")
+                                                                                    'inside_type'),
+                                                                                ref_regex=self.ref_regex)
+                    self.key_tree = self.key_tree.replace(adding_msg, "")
 
         return self.validate_msg
 
@@ -107,7 +110,8 @@ class TermValidator:
             for item in range(len(self.value)):
                 self.validate_array_msg = TermValidator().initialize_term(datatype="object", term=self.term,
                                                                           value=self.value[item], key=self.key,
-                                                                          key_tree=self.key_tree, list_item=item)
+                                                                          key_tree=self.key_tree, list_item=item,
+                                                                          ref_regex=self.ref_regex)
 
         return self.validate_msg
 
@@ -116,6 +120,7 @@ class DataTypeValidator:
     """Validate all data types"""
 
     def __init__(self):
+        self.ref_regex = None
         self.inside_type = None
         self.key_tree = None
         self.predefined_constants = None
@@ -128,13 +133,16 @@ class DataTypeValidator:
     def initialize_datatype(self, datatype, value, key,
                             regex=None, predefined_constants=None,
                             multi_datatype=None,
-                            constant=None, ref=None, key_tree=None, inside_type=None):
+                            constant=None, ref=None, key_tree=None, inside_type=None, ref_regex=None):
         """Initialize datatype"""
         default = "incorrect_datatype"
+
         if ref:
-            TermValidator().initialize_term(datatype=datatype, term=ref, value=value, key=key, key_tree=key_tree)
+            TermValidator().initialize_term(datatype=datatype, term=ref, value=value, key=key, key_tree=key_tree,
+                                            ref_regex=ref_regex)
         self.value = value
         self.regex = regex
+        self.ref_regex = ref_regex
         self.key = key
         self.key_tree = key_tree
         self.inside_type = inside_type
@@ -155,6 +163,10 @@ class DataTypeValidator:
             if self.constant and not constant_validator(self.value, self.constant):
                 self.key_tree = self.key_tree if self.key_tree else self.key
                 error_details[self.key_tree] = f"Constant not matched ({self.constant})."
+
+            if self.ref_regex and self.key == "reference" and not case_regex(self.value, self.ref_regex):
+                self.key_tree = self.key_tree if self.key_tree else self.key
+                error_details[self.key_tree] = "Ref Regex not matched."
         else:
             self.key_tree = self.key_tree if self.key_tree else self.key
             error_details[self.key_tree] = "Only allowed string data type."
@@ -163,7 +175,6 @@ class DataTypeValidator:
 
     def case_integer(self):
         """Validate integer data type"""
-
         int_check = isinstance(self.value, int)
 
         if int_check:
@@ -179,7 +190,6 @@ class DataTypeValidator:
 
     def case_positive_int(self):
         """Validate integer data type"""
-
         if isinstance(self.value, int) and self.value > 0:
             ...
         else:
@@ -194,7 +204,6 @@ class DataTypeValidator:
 
     def case_decimal(self):
         """Validate decimal data type"""
-
         if not Decimal(self.value):
             self.key_tree = self.key_tree if self.key_tree else self.key
             error_details[self.key_tree] = "Only allowed decimal data type."
@@ -203,7 +212,6 @@ class DataTypeValidator:
 
     def case_unsigned_int(self):
         """Validate integer data type"""
-
         if isinstance(self.value, int) and self.value >= 0:
             ...
         else:

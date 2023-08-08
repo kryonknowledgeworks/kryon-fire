@@ -18,9 +18,10 @@
     "ref": "period"
   },
   "issuer": {
-    "type": "string",
+    "type": "object",
     "cardinality": "0..1",
     "description": "Organization that regulates and issues the qualification.",
-    "regex": "Organization/\\w+"
+    "ref_regex": "^Organization.*",
+    "ref": "reference"
   }
 }
