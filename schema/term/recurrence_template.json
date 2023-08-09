@@ -1,0 +1,65 @@
+{
+  "timezone": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The timezone for the appointment",
+    "ref": "codeable_concept"
+  },
+  "recurrenceType": {
+    "type": "object",
+    "cardinality": "1..1",
+    "description": "The type of recurrence",
+    "ref": "codeable_concept"
+  },
+  "lastOccurrenceDate": {
+    "type": "date",
+    "cardinality": "0..1",
+    "description": "The date of the last occurrence of the appointment",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?"
+  },
+  "occurrenceCount": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "The number of occurrences of the appointment",
+    "regex": "[1-9][0-9]*"
+  },
+  "occurrenceDate": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "The dates of the occurrences of the appointment",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?",
+    "inside_type": "string"
+  },
+  "weeklyTemplate": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Information about weekly recurring appointments",
+    "ref": "weekly_template"
+  },
+  "monthlyTemplate": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Information about monthly recurring appointments",
+    "ref": "monthly_template"
+  },
+  "yearlyTemplate": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Information about yearly recurring appointments",
+    "ref": "yearly_template"
+  },
+  "excludingDate": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "The dates that should be excluded from the series",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?",
+    "inside_type": "string"
+  },
+  "excludingRecurrenceId": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "The dates that should be excluded from the series",
+    "regex": "([0-9]([0-9]([0-9][1-9]|[1-9]0)|[1-9]00)|[1-9]000)(-(0[1-9]|1[0-2])(-(0[1-9]|[1-2][0-9]|3[0-1]))?)?",
+    "inside_type": "positive_int"
+  }
+}

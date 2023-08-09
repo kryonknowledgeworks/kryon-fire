@@ -1,0 +1,39 @@
+{
+  "type": {
+    "type": "array",
+    "cardinality": "0..*",
+    "description": "Role of participant in encounter",
+    "ref": "codeable_concept"
+  },
+  "period": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Period of time during the encounter that the participant participated",
+    "ref": "period"
+  },
+  "actor": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Persons involved in the encounter other than the patient",
+    "ref_regex": "^(CareTeam|Device|Group|HealthcareService|Location|Patient|Practitioner|PractitionerRole|RelatedPerson).*",
+    "ref": "reference"
+  },
+  "required": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Whether this participant is required to be present at the meeting. This covers a use-case where some of the participants are not required to attend the meeting.",
+    "regex": "true|false"
+  },
+  "status": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "accepted",
+      "declined",
+      "tentative",
+      "needs-action"
+    ],
+    "cardinality": "1..1",
+    "description": "R!  accepted | declined | tentative | needs-action"
+  }
+}
+

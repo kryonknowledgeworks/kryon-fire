@@ -1,0 +1,24 @@
+{
+  "dayOfMonth": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "The day of the month on which the appointment is scheduled to occur (if this field is used instead of the other repeats)."
+  },
+  "nthWeekOfMonth": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The week of the month on which the appointment is scheduled to occur (if this field is used instead of the other repeats).",
+    "ref": "coding"
+  },
+  "dayOfWeek": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "The day of the week on which the appointment is scheduled to occur (if this field is used instead of the other repeats).",
+    "ref": "coding"
+  },
+  "monthInterval": {
+    "type": "positive_int",
+    "cardinality": "1..1",
+    "description": "The number of months between appointments. If present, then this overrides the duration period."
+  }
+}

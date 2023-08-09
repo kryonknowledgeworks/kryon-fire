@@ -1,0 +1,7 @@
+{
+  "yearInterval": {
+    "type": "positive_int",
+    "cardinality": "1..1",
+    "description": "Indicates the number of years between the event occurrences."
+  }
+}
