@@ -224,6 +224,10 @@ class DataTypeValidator:
         """Validate markdown data type"""
         return self.case_string()
 
+    def case_instant(self):
+        """Validate instant data type"""
+        return self.case_string()
+
     def case_uri(self):
         """Validate uri data type"""
         return self.case_string()
@@ -243,15 +247,13 @@ class DataTypeValidator:
             error_details[self.key_tree] = "Only allowed array data type."
         else:
             for i in self.value:
-                if not isinstance(i, change_datatype_valid_format(self.inside_type)):
-                    self.key_tree = self.key_tree if self.key_tree else self.key
-                    error_details[self.key_tree] = "Only allowed array contains string data type."
+                validate_msg = DataTypeValidator().initialize_datatype(datatype=self.inside_type, value=i,
+                                                                       key=self.key,
+                                                                       regex=self.regex,
+                                                                       key_tree=self.key_tree)
+
+                if validate_msg:
                     break
-                else:
-                    if self.regex and not case_regex(i, self.regex):
-                        self.key_tree = self.key_tree if self.key_tree else self.key
-                        error_details[self.key_tree] = "Regex not matched."
-                        break
 
         return error_details.get(self.key_tree)
 

@@ -1,0 +1,49 @@
+{
+  "monday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Monday",
+    "regex": "true|false"
+  },
+  "tuesday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Tuesday",
+    "regex": "true|false"
+  },
+  "wednesday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Wednesday",
+    "regex": "true|false"
+  },
+  "thursday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Thursday",
+    "regex": "true|false"
+  },
+  "friday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Friday",
+    "regex": "true|false"
+  },
+  "saturday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Saturday",
+    "regex": "true|false"
+  },
+  "sunday": {
+    "type": "boolean",
+    "cardinality": "0..1",
+    "description": "Recurs on Sunday",
+    "regex": "true|false"
+  },
+  "weekInterval": {
+    "type": "positive_int",
+    "cardinality": "0..1",
+    "description": "Recurs every X weeks"
+  }
+}

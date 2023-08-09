@@ -49,16 +49,14 @@
     "description": "Contact for the organization for a certain purpose.",
     "ref": "extended_contact_detail"
   },
-  "partOf":
-  {
+  "partOf": {
     "type": "object",
     "cardinality": "0..1",
     "description": "The organization of which this organization forms a part.",
     "ref_regex": "^Organization.*",
     "ref": "reference"
   },
-  "endpoint":
-  {
+  "endpoint": {
     "type": "array",
     "cardinality": "0..*",
     "description": "Technical endpoints providing access to services operated for the organization.",
