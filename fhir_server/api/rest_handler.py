@@ -11,8 +11,17 @@ from fhir_server.core.utils.vars import generate_random_sequence
 resource_controller_bp = Blueprint('resource_controller', __name__)
 
 
-@resource_controller_bp.route('/api/v1/resource/<resource_type>', methods=['GET', 'POST', 'PUT', 'DELETE'])
+@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>', methods=['POST', 'PUT', 'DELETE'])
 def resource_endpoint(resource_type: str):
+    if request.method == 'POST':
+        resource, statuscode = add_resource(resource_type, request.json)
+        return resource, statuscode
+    else:
+        return {"errors": "Not implemented yet."}, 400
+
+
+@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>', methods=['GET'])
+def resource_endpoint_get(resource_type: str):
     if request.method == 'POST':
         resource, statuscode = add_resource(resource_type, request.json)
         return resource, statuscode
