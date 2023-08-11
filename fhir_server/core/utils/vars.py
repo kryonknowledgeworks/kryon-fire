@@ -1,13 +1,15 @@
 """This module contains utility functions for variables."""
 import os
 import json
+import random
+import string
+
 from benedict import benedict
 
 
 def get_resource_schema(resource_type: str):
     """Returns a schema for a given resource type."""
-    schema_path = os.getcwd() + f'/schema/{resource_type}.json'
-
+    schema_path = f'fhir_server/schema/{resource_type}.json'
     if not os.path.exists(schema_path):
         return None
 
@@ -41,3 +43,10 @@ def change_datatype_valid_format(datatype):
         return list
     elif datatype == "object":
         return dict
+
+
+# Generate a random sequence of letters and digits including all alphabets and digits
+def generate_random_sequence():
+    characters = string.ascii_letters + string.digits
+    random_sequence = ''.join(random.choice(characters) for _ in range(16))
+    return random_sequence

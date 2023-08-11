@@ -1,6 +1,6 @@
 """This file contains utility functions for validating data types."""
 import re
-from core.utils.vars import get_resource_schema, change_datatype_valid_format
+from fhir_server.core.utils.vars import get_resource_schema, change_datatype_valid_format
 from decimal import Decimal
 
 error_details = dict()
@@ -56,7 +56,7 @@ class TermValidator:
                 {self.key_tree: f"Only {self.datatype} is allowed. ({self.key})"})
 
         else:
-            self.schema = get_resource_schema(f"term/{self.term}")
+            self.schema = get_resource_schema(f"/term/{self.term}")
 
             for key in self.schema.keys():
                 if self.schema[key].get('cardinality') == '1..1' and not self.value.get(key):
