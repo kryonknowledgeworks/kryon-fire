@@ -1,4 +1,4 @@
-from core.BaseResource import BaseResource
+from fhir_server.core.BaseResource import BaseResource
 
 
 class DomainResource(BaseResource):
