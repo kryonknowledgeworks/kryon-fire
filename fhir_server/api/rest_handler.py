@@ -53,6 +53,7 @@ def add_resource(resource_type: str, resource_json: dict):
     validation_result = resource_handler.validation_result()
     if validation_result:
         json_details = {
+            
             "text": {
                 "status": "Validation failed",
                 "errors": validation_result
