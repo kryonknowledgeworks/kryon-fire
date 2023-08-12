@@ -4,6 +4,7 @@ import json
 import random
 import string
 
+from datetime import datetime, timezone
 from benedict import benedict
 
 
@@ -50,3 +51,10 @@ def generate_random_sequence():
     characters = string.ascii_letters + string.digits
     random_sequence = ''.join(random.choice(characters) for _ in range(16))
     return random_sequence
+
+
+def instant_datetime():
+    """Returns the current time in FHIR format."""
+    formatted_time = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
+    formatted_time = formatted_time[:-2] + ':' + formatted_time[-2:]
+    return formatted_time
