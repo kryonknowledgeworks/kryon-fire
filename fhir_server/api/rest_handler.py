@@ -65,10 +65,19 @@ def add_resource(resource_type: str, resource_json: dict):
 
     if validation_result:
         json_details = {
+            "resourceType": "OperationOutcome",
             "text": {
-                "status": "Validation failed",
-                "errors": validation_result
-            }
+                "status": "generated"
+            },
+            "issue": [
+                {
+                    "severity": "error",
+                    "code": "processing",
+                    "diagnostics": f"Failed to parse request body as JSON resource. Error was: "
+                                   f"Invalid JSON content detected.",
+                    "errors": validation_result
+                }
+            ]
         }
 
         return json_details, 400
@@ -97,10 +106,18 @@ def update_resource(resource_type, resource_json, resource_id):
     validation_result = resource_handler.validation_result()
     if validation_result:
         json_details = {
+            "resourceType": "OperationOutcome",
             "text": {
-                "status": "Validation failed",
-                "errors": validation_result
-            }
+                "status": "generated"
+            },
+            "issue": [
+                {
+                    "severity": "error",
+                    "code": "processing",
+                    "diagnostics": f"Failed to parse request body as JSON resource. Error was: "
+                                   f"Invalid JSON content detected, {validation_result}"
+                }
+            ]
         }
 
         return json_details, 400
@@ -136,7 +153,7 @@ def update_resource(resource_type, resource_json, resource_id):
                         "source": f"#{generate_random_sequence()}"
                     },
                     "text": {
-                        "status": "updated",
+                        "status": "updated"
                     }
                 }
 
