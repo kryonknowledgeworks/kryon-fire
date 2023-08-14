@@ -106,7 +106,7 @@
           "FHIR"
         ],
         "summary": "Update a resource or create new keys if it does not exist",
-        "description": "Update a resource",
+        "description": "Update an existing resource",
         "operationId": "updateResource",
         "parameters": [
           {
@@ -143,7 +143,44 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response"
+            "description": "Successful operation"
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "FHIR"
+        ],
+        "summary": "Deletes a resource",
+        "description": "Deletes a resource",
+        "operationId": "deleteResource",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_type",
+            "type": "string",
+            "enum": [
+              "Patient",
+              "Practitioner",
+              "Organization",
+              "Encounter",
+              "ServiceRequest",
+              "Appointment"
+            ],
+            "required": true,
+            "description": "type of resource"
+          },
+          {
+            "name": "resource_id",
+            "in": "query",
+            "description": "ID of resource to return",
+            "required": true,
+            "type": "string"
+          }
+        ],
+        "responses": {
+          "400": {
+            "description": "Invalid ID supplied"
           }
         }
       }
