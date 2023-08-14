@@ -17,7 +17,7 @@
     "application/json"
   ],
   "paths": {
-    "/resource/create/{resource_type}": {
+    "/resource/{resource_type}": {
       "post": {
         "tags": [
           "FHIR"
@@ -33,7 +33,7 @@
               "Practitioner",
               "Organization",
               "Encounter",
-              "serviceRequest",
+              "ServiceRequest",
               "Appointment"
             ],
             "required": true,
@@ -54,20 +54,10 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response.",
-            "schema": {
-              "type": "object",
-              "properties": {
-                "message": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "Successful response."
           }
         }
-      }
-    },
-    "/resource/read/{resource_type}": {
+      },
       "get": {
         "tags": [
           "FHIR"
@@ -91,7 +81,7 @@
               "Practitioner",
               "Organization",
               "Encounter",
-              "serviceRequest",
+              "ServiceRequest",
               "Appointment"
             ],
             "required": true,
@@ -107,14 +97,53 @@
         ],
         "responses": {
           "200": {
-            "description": "Successful response",
-            "examples": {
-              "application/json": {
-                "id": "123",
-                "name": "John Doe",
-                "email": "johndoe@example.com"
-              }
+            "description": "Successful response"
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "FHIR"
+        ],
+        "summary": "Update a resource or create new keys if it does not exist",
+        "description": "Update a resource",
+        "operationId": "updateResource",
+        "parameters": [
+          {
+            "in": "path",
+            "name": "resource_type",
+            "type": "string",
+            "enum": [
+              "Patient",
+              "Practitioner",
+              "Organization",
+              "Encounter",
+              "ServiceRequest",
+              "Appointment"
+            ],
+            "required": true,
+            "description": "type of resource"
+          },
+          {
+            "name": "resource_id",
+            "in": "query",
+            "description": "ID of resource to return",
+            "required": true,
+            "type": "string"
+          },
+          {
+            "in": "body",
+            "name": "body",
+            "description": "Resource object",
+            "required": true,
+            "schema": {
+              "type": "object"
             }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful response"
           }
         }
       }
