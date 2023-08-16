@@ -7,7 +7,7 @@ from bson.json_util import dumps
 
 from fhir_server import mongo
 from fhir_server.core.resources.Resource_handler import ResourceHandler
-from fhir_server.core.utils.vars import generate_random_sequence, instant_datetime
+from fhir_server.core.utils.vars import generate_random_sequence, instant_datetime, compare_dicts
 
 resource_controller_bp = Blueprint('resource_controller', __name__)
 
@@ -151,12 +151,22 @@ def update_resource(resource_type, resource_json, resource_id):
                     {'meta.versionId': str(max_version_id)}
                 ]
             }
-            result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+            result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "text": 0, "response": 0,
+                                                                   "request": 0})
 
             if result:
                 json_data = dumps(result)
                 resource = json.loads(json_data)
+
+                if resource_json.get("id") is None:
+                    return {"errors": "Resource id not contains in request body"}, 400
+
                 version_id = str(int(resource.get("meta").get("versionId")) + 1)
+
+                resource.pop("meta")
+
+                if not compare_dicts(resource, resource_json):
+                    return {"errors": "No changes found in the resource"}, 400
 
                 json_details = {
                     "id": resource_id,
@@ -170,7 +180,19 @@ def update_resource(resource_type, resource_json, resource_id):
                     }
                 }
 
+                history_json = {Re
+                    "request": {
+                        "method": "PUT",
+                        "url": f"{resource_type.upper()}/{resource_id}/_history/{version_id}"
+                    },
+                    "response": {
+                        "status": "200 Updated",
+                        "etag": f"W/\"{version_id}\""
+                    }
+                }
+
                 resource_json.update(json_details)
+                resource_json.update(history_json)
                 mongo[resource_type.lower()].insert_one(resource_json)
 
                 return json_details, 200

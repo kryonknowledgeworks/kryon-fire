@@ -58,3 +58,24 @@ def instant_datetime():
     formatted_time = datetime.now(timezone.utc).strftime('%Y-%m-%dT%H:%M:%S.%f%z')
     formatted_time = formatted_time[:-2] + ':' + formatted_time[-2:]
     return formatted_time
+
+
+def compare_dicts(dict1, dict2):
+    """Compares two dictionaries and returns True if they are different."""
+    if type(dict1) is not dict or type(dict2) is not dict:
+        return dict1 != dict2
+
+    keys1 = set(dict1.keys())
+    keys2 = set(dict2.keys())
+
+    added_keys = keys2 - keys1
+    removed_keys = keys1 - keys2
+
+    if added_keys or removed_keys:
+        return True  # Different keys, so there are changes
+
+    for key in keys1:
+        if compare_dicts(dict1[key], dict2[key]):
+            return True  # Recursive call to compare nested dictionaries
+
+    return False  # No changes found
