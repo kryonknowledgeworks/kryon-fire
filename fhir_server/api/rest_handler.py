@@ -83,8 +83,9 @@ def add_resource(resource_type: str, resource_json: dict):
         return json_details, 400
 
     else:
+        resource_id = str(uuid.uuid4())
         json_details = {
-            "id": str(uuid.uuid4()),
+            "id": resource_id,
             "meta": {
                 "versionId": "1",
                 "lastUpdated": instant_datetime(),
@@ -92,9 +93,21 @@ def add_resource(resource_type: str, resource_json: dict):
             },
             "text": {
                 "status": "generated",
+            }
+        }
+
+        history_json = {
+            "request": {
+                "method": "POST",
+                "url": f"{resource_type.upper()}/{resource_id}/_history/1"
+            },
+            "response": {
+                "status": "201 Created",
+                "etag": "W/\"1\""
             }}
 
         resource_json.update(json_details)
+        resource_json.update(history_json)
         mongo[resource_type.lower()].insert_one(resource_json)
 
         return json_details, 201
