@@ -198,7 +198,7 @@ def get_resource(resource_id, resource_type):
             ]
         }
 
-        result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "request": 0, "response": 0})
         if result:
             json_data = dumps(result)
             json_data = json.loads(json_data)
@@ -216,7 +216,7 @@ def get_resource(resource_id, resource_type):
                         }
                     ]
                 }
-                return json.dumps(json_details, indent=2), 200
+                return json.dumps(json_details, indent=2), 400
             else:
                 return json.dumps(json_data, indent=2), 200
 
