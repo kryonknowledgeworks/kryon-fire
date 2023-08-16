@@ -1,0 +1,21 @@
+{
+  "resourceType": {
+    "type": "string",
+    "constant": "OperationOutcome",
+    "description": "Type of resource.",
+    "cardinality": "0..*",
+    "regex": "^[\\s\\S]+$"
+  },
+  "issue": {
+    "type": "array",
+    "cardinality": "1..*",
+    "description": "A single issue associated with the action.",
+    "ref": "issue"
+  }
+}
+
+
+
+
+
+

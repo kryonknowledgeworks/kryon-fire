@@ -1,0 +1,46 @@
+{
+  "severity": {
+    "type": "predefined_constants",
+    "predefined_constants": [
+      "fatal",
+      "error",
+      "warning",
+      "information",
+      "success"
+    ],
+    "cardinality": "1..1",
+    "description": "Indicates whether the issue indicates a variation from successful processing."
+  },
+  "code": {
+    "type": "code",
+    "cardinality": "1..1",
+    "description": "A code indicating the type of error, warning or information message.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "details": {
+    "type": "object",
+    "cardinality": "0..1",
+    "description": "Additional details about the error that occurred. This is a text description of the error condition.",
+    "ref": "codeable_concept"
+  },
+  "diagnostics": {
+    "type": "string",
+    "cardinality": "0..1",
+    "description": "This element is deprecated because it is XML specific. It is replaced by issue.expression, which is format independent, and simpler to parse. Contains XML location of the error. If multiple locations are listed, the first one contains the most specific location.",
+    "regex": "^[\\s\\S]+$"
+  },
+  "location": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A simple XPath limited to element names, repetition indicators and the default child access that identifies one of the elements in the resource that caused this issue to be raised.",
+    "regex": "^[\\s\\S]+$",
+    "inside_type": "string"
+  },
+  "expression": {
+    "type": "inside_array",
+    "cardinality": "0..*",
+    "description": "A simple XPath limited to element names, repetition indicators and the default child access that identifies one of the elements in the resource that caused this issue to be raised.",
+    "regex": "^[\\s\\S]+$",
+    "inside_type": "string"
+  }
+}

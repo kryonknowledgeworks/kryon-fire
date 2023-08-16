@@ -1,4 +1,5 @@
 """ This module is used to handle the REST API requests."""
+import time
 import uuid
 import json
 
@@ -7,7 +8,7 @@ from bson.json_util import dumps
 
 from fhir_server import mongo
 from fhir_server.core.resources.Resource_handler import ResourceHandler
-from fhir_server.core.utils.vars import generate_random_sequence, instant_datetime
+from fhir_server.core.utils.vars import generate_random_sequence, instant_datetime, compare_dicts
 
 resource_controller_bp = Blueprint('resource_controller', __name__)
 
@@ -133,6 +134,27 @@ def update_resource(resource_type, resource_json, resource_id):
             ]
         }
 
+        extra_field = {
+            "id": resource_id,
+            "meta": {
+                "versionId": "1",
+                "lastUpdated": instant_datetime(),
+                "source": f"#{generate_random_sequence()}"
+            },
+            "request": {
+                "method": "POST",
+                "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+            },
+            "response": {
+                "status": "200 OK",
+                "etag": fr"W/\"{generate_random_sequence()}\""
+            }
+        }
+
+        extra_field.update(json_details)
+
+        mongo["OperationOutcome".lower()].insert_one(extra_field)
+
         return json_details, 400
 
     else:
@@ -151,12 +173,22 @@ def update_resource(resource_type, resource_json, resource_id):
                     {'meta.versionId': str(max_version_id)}
                 ]
             }
-            result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+            result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "text": 0, "response": 0, "request": 0})
 
             if result:
                 json_data = dumps(result)
                 resource = json.loads(json_data)
+
+                if resource_json.get("id") is None or resource_json.get("id") == resource_id:
+                    return {"errors": "Resource id not contains in request body"}, 400
+
                 version_id = str(int(resource.get("meta").get("versionId")) + 1)
+
+                resource.pop("meta")
+                resource.pop("request")
+
+                if not compare_dicts(resource, resource_json):
+                    return {"errors": "No changes found in the resource"}, 400
 
                 json_details = {
                     "id": resource_id,
@@ -170,7 +202,19 @@ def update_resource(resource_type, resource_json, resource_id):
                     }
                 }
 
+                history_json = {
+                    "request": {
+                        "method": "PUT",
+                        "url": f"{resource_type.upper()}/{resource_id}/_history/{version_id}"
+                    },
+                    "response": {
+                        "status": "200 Updated",
+                        "etag": f"W/\"{version_id}\""
+                    }
+                }
+
                 resource_json.update(json_details)
+                resource_json.update(history_json)
                 mongo[resource_type.lower()].insert_one(resource_json)
 
                 return json_details, 200
@@ -198,11 +242,11 @@ def get_resource(resource_id, resource_type):
             ]
         }
 
-        result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "response": 0})
         if result:
             json_data = dumps(result)
             json_data = json.loads(json_data)
-            if json_data.get("deleted"):
+            if json_data.get("request") and json_data.get("request").get("method") == "DELETE":
                 json_details = {
                     "resourceType": "OperationOutcome",
                     "text": {
@@ -216,8 +260,28 @@ def get_resource(resource_id, resource_type):
                         }
                     ]
                 }
-                return json.dumps(json_details, indent=2), 200
+
+                extra_field = {
+                    "id": resource_id,
+                    "meta": json_data.get("meta"),
+                    "request": {
+                        "method": "POST",
+                        "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+                    },
+                    "response": {
+                        "status": "200 OK",
+                        "etag": fr"W/\"{json_data.get('meta').get('versionId')}\""
+                    }
+                }
+
+                extra_field.update(json_details)
+
+                mongo["OperationOutcome".lower()].insert_one(extra_field)
+
+                return json.dumps(json_details, indent=2), 400
+
             else:
+                json_data.pop("request")
                 return json.dumps(json_data, indent=2), 200
 
         else:
@@ -228,6 +292,7 @@ def get_resource(resource_id, resource_type):
 
 
 def delete_resource(resource_id, resource_type):
+    start_time = time.time()
     pipeline = [
         {'$match': {'id': resource_id}},
         {'$group': {'_id': None, 'max_version': {'$max': {'$toInt': '$meta.versionId'}}}}
@@ -244,10 +309,10 @@ def delete_resource(resource_id, resource_type):
             ]
         }
 
-        result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "request": 1, "meta": 1})
         result = json.loads(dumps(result))
         if result:
-            if result.get("deleted"):
+            if result.get("request") and result.get("request").get("method") == "DELETE":
                 json_details = {
                     "resourceType": "OperationOutcome",
                     "text": {
@@ -272,30 +337,34 @@ def delete_resource(resource_id, resource_type):
                         }
                     ]
                 }
+
+                extra_field = {
+                    "id": resource_id,
+                    "meta": result.get("meta"),
+                    "request": {
+                        "method": "POST",
+                        "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+                    },
+                    "response": {
+                        "status": "200 OK",
+                        "etag": fr"W/\"{result.get('meta').get('versionId')}\""
+                    }
+                }
+
+                extra_field.update(json_details)
+
+                mongo["OperationOutcome".lower()].insert_one(extra_field)
+
                 return json.dumps(json_details, indent=2), 400
             else:
                 json_details = {
-                    "deleted": {
-                        "resourceType": "OperationOutcome",
-                        "text": {
-                            "status": "generated",
-                        },
-                        "issue": [
-                            {
-                                "severity": "information",
-                                "code": "informational",
-                                "details": {
-                                    "coding": [
-                                        {
-                                            "system": "<not implemented.>",
-                                            "code": "SUCCESSFUL_DELETE",
-                                            "display": "Delete succeeded."
-                                        }
-                                    ]
-                                },
-                                "diagnostics": "Successfully deleted 1 resource(s). Took 20ms."
-                            }
-                        ]
+                    "request": {
+                        "method": "DELETE",
+                        "url": f"{resource_type.upper()}/{resource_id}/_history/{result.get('meta').get('versionId')}"
+                    },
+                    "response": {
+                        "status": "204 Deleted",
+                        "etag": f"W/\"{result.get('meta').get('versionId')}\""
                     },
                     "meta": {
                         "versionId": result.get("meta").get("versionId"),
@@ -305,7 +374,33 @@ def delete_resource(resource_id, resource_type):
                 }
 
                 mongo[resource_type.lower()].update_one(query, {"$set": json_details})
-                return json.dumps(json_details["deleted"], indent=2), 200
+
+                end_time = time.time()
+                execution_time_ms = str(int((end_time - start_time) * 1000))
+                response = {
+                    "resourceType": "OperationOutcome",
+                    "text": {
+                        "status": "generated",
+                    },
+                    "issue": [
+                        {
+                            "severity": "information",
+                            "code": "informational",
+                            "details": {
+                                "coding": [
+                                    {
+                                        "system": "<not implemented.>",
+                                        "code": "SUCCESSFUL_DELETE",
+                                        "display": "Delete succeeded."
+                                    }
+                                ]
+                            },
+                            "diagnostics": f"Successfully deleted 1 resource(s). Took {execution_time_ms}ms."
+                        }
+                    ]
+                }
+
+                return json.dumps(response, indent=2), 200
         else:
             return resource_id_missing
 
