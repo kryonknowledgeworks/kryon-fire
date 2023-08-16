@@ -1,4 +1,5 @@
 """ This module is used to handle the REST API requests."""
+import time
 import uuid
 import json
 
@@ -151,19 +152,19 @@ def update_resource(resource_type, resource_json, resource_id):
                     {'meta.versionId': str(max_version_id)}
                 ]
             }
-            result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "text": 0, "response": 0,
-                                                                   "request": 0})
+            result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "text": 0, "response": 0, "request": 0})
 
             if result:
                 json_data = dumps(result)
                 resource = json.loads(json_data)
 
-                if resource_json.get("id") is None:
+                if resource_json.get("id") is None or resource_json.get("id") == resource_id:
                     return {"errors": "Resource id not contains in request body"}, 400
 
                 version_id = str(int(resource.get("meta").get("versionId")) + 1)
 
                 resource.pop("meta")
+                resource.pop("request")
 
                 if not compare_dicts(resource, resource_json):
                     return {"errors": "No changes found in the resource"}, 400
@@ -180,7 +181,7 @@ def update_resource(resource_type, resource_json, resource_id):
                     }
                 }
 
-                history_json = {Re
+                history_json = {
                     "request": {
                         "method": "PUT",
                         "url": f"{resource_type.upper()}/{resource_id}/_history/{version_id}"
@@ -220,11 +221,11 @@ def get_resource(resource_id, resource_type):
             ]
         }
 
-        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "request": 0, "response": 0})
+        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "response": 0})
         if result:
             json_data = dumps(result)
             json_data = json.loads(json_data)
-            if json_data.get("deleted"):
+            if json_data.get("request") and json_data.get("request").get("method") == "DELETE":
                 json_details = {
                     "resourceType": "OperationOutcome",
                     "text": {
@@ -240,6 +241,7 @@ def get_resource(resource_id, resource_type):
                 }
                 return json.dumps(json_details, indent=2), 400
             else:
+                json_data.pop("request")
                 return json.dumps(json_data, indent=2), 200
 
         else:
@@ -250,6 +252,7 @@ def get_resource(resource_id, resource_type):
 
 
 def delete_resource(resource_id, resource_type):
+    start_time = time.time()
     pipeline = [
         {'$match': {'id': resource_id}},
         {'$group': {'_id': None, 'max_version': {'$max': {'$toInt': '$meta.versionId'}}}}
@@ -266,10 +269,10 @@ def delete_resource(resource_id, resource_type):
             ]
         }
 
-        result = mongo[resource_type.lower()].find_one(query, {"_id": 0})
+        result = mongo[resource_type.lower()].find_one(query, {"_id": 0, "request": 1, "meta": 1})
         result = json.loads(dumps(result))
         if result:
-            if result.get("deleted"):
+            if result.get("request") and result.get("request").get("method") == "DELETE":
                 json_details = {
                     "resourceType": "OperationOutcome",
                     "text": {
@@ -297,27 +300,14 @@ def delete_resource(resource_id, resource_type):
                 return json.dumps(json_details, indent=2), 400
             else:
                 json_details = {
-                    "deleted": {
-                        "resourceType": "OperationOutcome",
-                        "text": {
-                            "status": "generated",
-                        },
-                        "issue": [
-                            {
-                                "severity": "information",
-                                "code": "informational",
-                                "details": {
-                                    "coding": [
-                                        {
-                                            "system": "<not implemented.>",
-                                            "code": "SUCCESSFUL_DELETE",
-                                            "display": "Delete succeeded."
-                                        }
-                                    ]
-                                },
-                                "diagnostics": "Successfully deleted 1 resource(s). Took 20ms."
-                            }
-                        ]
+
+                    "request": {
+                        "method": "DELETE",
+                        "url": f"{resource_type.upper()}/{resource_id}/_history/{result.get('meta').get('versionId')}"
+                    },
+                    "response": {
+                        "status": "204 Deleted",
+                        "etag": f"W/\"{result.get('meta').get('versionId')}\""
                     },
                     "meta": {
                         "versionId": result.get("meta").get("versionId"),
@@ -327,7 +317,33 @@ def delete_resource(resource_id, resource_type):
                 }
 
                 mongo[resource_type.lower()].update_one(query, {"$set": json_details})
-                return json.dumps(json_details["deleted"], indent=2), 200
+
+                end_time = time.time()
+                execution_time_ms = str(int((end_time - start_time) * 1000))
+                response = {
+                    "resourceType": "OperationOutcome",
+                    "text": {
+                        "status": "generated",
+                    },
+                    "issue": [
+                        {
+                            "severity": "information",
+                            "code": "informational",
+                            "details": {
+                                "coding": [
+                                    {
+                                        "system": "<not implemented.>",
+                                        "code": "SUCCESSFUL_DELETE",
+                                        "display": "Delete succeeded."
+                                    }
+                                ]
+                            },
+                            "diagnostics": f"Successfully deleted 1 resource(s). Took {execution_time_ms}ms."
+                        }
+                    ]
+                }
+
+                return json.dumps(response, indent=2), 200
         else:
             return resource_id_missing
 
