@@ -134,6 +134,27 @@ def update_resource(resource_type, resource_json, resource_id):
             ]
         }
 
+        extra_field = {
+            "id": resource_id,
+            "meta": {
+                "versionId": "1",
+                "lastUpdated": instant_datetime(),
+                "source": f"#{generate_random_sequence()}"
+            },
+            "request": {
+                "method": "POST",
+                "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+            },
+            "response": {
+                "status": "200 OK",
+                "etag": fr"W/\"{generate_random_sequence()}\""
+            }
+        }
+
+        extra_field.update(json_details)
+
+        mongo["OperationOutcome".lower()].insert_one(extra_field)
+
         return json_details, 400
 
     else:
@@ -239,7 +260,26 @@ def get_resource(resource_id, resource_type):
                         }
                     ]
                 }
+
+                extra_field = {
+                    "id": resource_id,
+                    "meta": json_data.get("meta"),
+                    "request": {
+                        "method": "POST",
+                        "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+                    },
+                    "response": {
+                        "status": "200 OK",
+                        "etag": fr"W/\"{json_data.get('meta').get('versionId')}\""
+                    }
+                }
+
+                extra_field.update(json_details)
+
+                mongo["OperationOutcome".lower()].insert_one(extra_field)
+
                 return json.dumps(json_details, indent=2), 400
+
             else:
                 json_data.pop("request")
                 return json.dumps(json_data, indent=2), 200
@@ -297,10 +337,27 @@ def delete_resource(resource_id, resource_type):
                         }
                     ]
                 }
+
+                extra_field = {
+                    "id": resource_id,
+                    "meta": result.get("meta"),
+                    "request": {
+                        "method": "POST",
+                        "url": f"{'OperationOutcome'.upper()}/{resource_id}"
+                    },
+                    "response": {
+                        "status": "200 OK",
+                        "etag": fr"W/\"{result.get('meta').get('versionId')}\""
+                    }
+                }
+
+                extra_field.update(json_details)
+
+                mongo["OperationOutcome".lower()].insert_one(extra_field)
+
                 return json.dumps(json_details, indent=2), 400
             else:
                 json_details = {
-
                     "request": {
                         "method": "DELETE",
                         "url": f"{resource_type.upper()}/{resource_id}/_history/{result.get('meta').get('versionId')}"
