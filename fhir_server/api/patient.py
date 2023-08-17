@@ -12,8 +12,8 @@ patient_bp = Blueprint('patient', __name__)
 def get_patient():
 
     # TODO: Implement this list of args
-    args_list = ["birthdate", "gender",
-                 "email", "identifier",
+    args_list = ["birthdate", "gender", 
+
                  "general_practitioner", "_security", "active", "_filter", "_profile",
                  "phone", "_tag", "organization", "_has", "address_use", "source", "_id", "_text", "_content", "family"]
 
@@ -64,6 +64,11 @@ def get_patient():
 
     if request.args.get("email"):
         search_criteria["$and"].append({"telecom": {"$elemMatch": {"system": request.args.get("email")}}})
+
+    if request.args.get("identifier"):
+        print("Not implemented yet")
+
+
 
     page_number = 1
     page_size = 10
