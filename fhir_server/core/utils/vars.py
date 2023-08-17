@@ -79,3 +79,14 @@ def compare_dicts(dict1, dict2):
             return True  # Recursive call to compare nested dictionaries
 
     return False  # No changes found
+
+
+def dict_all_key_validation_query(term, value):
+    schema = get_resource_schema(f"/term/{term}")
+    search_address_criteria = {"$or": []}
+
+    for key in schema.keys():
+        query = {"address": {"$elemMatch": {key: value}}}
+        search_address_criteria.get("$or").append(query)
+
+    return search_address_criteria

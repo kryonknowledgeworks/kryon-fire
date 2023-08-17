@@ -16,45 +16,32 @@ resource_id_missing = {"errors": "Resource id not found"}, 404
 not_implemented = {"errors": "Not implemented yet."}, 400
 
 
-@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>', methods=['POST', 'PUT'])
-def resource_endpoint(resource_type: str):
-    """This function handles the POST, PUT and DELETE requests for a resource type."""
-    if request.method == 'POST':
-        resource, statuscode = add_resource(resource_type, request.json)
-        return resource, statuscode
-
-    elif request.method == 'PUT':
-        resource_id = request.args.get('resource_id')
-        if resource_id:
-            resource, statuscode = update_resource(resource_type, request.json, resource_id)
-            return resource, statuscode
-
-        else:
-            return resource_id_missing
-
-    else:
-        return not_implemented
+@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>', methods=['POST'])
+def resource_endpoint_post(resource_type: str):
+    """This function handles the POST request for a resource type."""
+    resource, statuscode = add_resource(resource_type, request.json)
+    return resource, statuscode
 
 
-@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>', methods=['GET', 'PATCH',
-                                                                                'DELETE'])
-def resource_endpoint_get(resource_type: str):
+@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>/<resource_id>', methods=['PUT'])
+def resource_endpoint_put(resource_type: str, resource_id: str):
+    """This function handles the PUT request for a resource type."""
+    resource, statuscode = update_resource(resource_type, request.json, resource_id)
+    return resource, statuscode
+
+
+@resource_controller_bp.route(rule='/api/v1/resource/<resource_type>/<resource_id>', methods=['GET', 'PATCH',
+                                                                                              'DELETE'])
+def resource_endpoint_get(resource_type: str, resource_id: str):
     """This function handles the GET requests for a resource type."""
     if request.method == 'GET':
-        resource_id = request.args.get('resource_id')
-        if resource_id:
-            resource, statuscode = get_resource(resource_id, resource_type)
-            return resource, statuscode
-        else:
-            return resource_id_missing
+        resource, statuscode = get_resource(resource_id, resource_type)
+        return resource, statuscode
 
     elif request.method == 'DELETE':
-        resource_id = request.args.get('resource_id')
-        if resource_id:
-            resource, statuscode = delete_resource(resource_id, resource_type)
-            return resource, statuscode
-        else:
-            return resource_id_missing
+        resource, statuscode = delete_resource(resource_id, resource_type)
+        return resource, statuscode
+
     else:
         return not_implemented
 
