@@ -20,7 +20,6 @@ def get_patient():
     search_criteria = {
         "$and": []
     }
-    
 
     if request.args.get("deceased"):
         or_query = {"$or": [
