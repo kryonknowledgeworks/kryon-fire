@@ -57,7 +57,9 @@
             "description": "Successful response."
           }
         }
-      },
+      }
+    },
+    "/resource/{resource_type}/{resource_id}": {
       "get": {
         "tags": [
           "FHIR"
@@ -89,7 +91,7 @@
           },
           {
             "name": "resource_id",
-            "in": "query",
+            "in": "path",
             "description": "ID of resource to return",
             "required": true,
             "type": "string"
@@ -126,7 +128,7 @@
           },
           {
             "name": "resource_id",
-            "in": "query",
+            "in": "path",
             "description": "ID of resource to return",
             "required": true,
             "type": "string"
@@ -172,7 +174,7 @@
           },
           {
             "name": "resource_id",
-            "in": "query",
+            "in": "path",
             "description": "ID of resource to return",
             "required": true,
             "type": "string"

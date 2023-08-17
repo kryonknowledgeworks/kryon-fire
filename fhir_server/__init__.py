@@ -25,7 +25,9 @@ with app.app_context():
     # Importing routes
     from fhir_server.api.index import index_controller_bp
     from fhir_server.api.rest_handler import resource_controller_bp
+    from fhir_server.api.patient import patient_bp
 
     # Registering blueprints
     app.register_blueprint(index_controller_bp)
     app.register_blueprint(resource_controller_bp)
+    app.register_blueprint(patient_bp)
