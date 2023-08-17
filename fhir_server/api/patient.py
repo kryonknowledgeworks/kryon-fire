@@ -22,8 +22,6 @@ def get_patient():
     }
 
 
-    
-
     if request.args.get("deceased"):
         or_query = {"$or": [
             {"deceasedBoolean": request.args.get("deceased")},
