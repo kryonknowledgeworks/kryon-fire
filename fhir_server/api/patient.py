@@ -13,7 +13,6 @@ def get_patient():
 
     # TODO: Implement this list of args
     args_list = ["birthdate", "gender",
-
                  "general_practitioner", "_security", "active", "_filter", "_profile",
                  "phone", "_tag", "organization", "_has", "address_use", "source", "_id", "_text", "_content", "family"]
 
